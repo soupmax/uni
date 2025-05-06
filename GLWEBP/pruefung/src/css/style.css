@@ -7,13 +7,17 @@ grid-template-areas:
 'footer footer';
 margin: 0;
 }
-nav {grid-area: nav; background-color: white; display: flex; flex-flow: row wrap; justify-content: flex-start;}
+nav {grid-area: nav; background-color: white; display: flex; flex-flow: row wrap; justify-content: flex-start; align-items: center;}
 nav a {background-color: transparent; padding: 1em; text-decoration: none;margin: 0 1em 0 1em; color: black;}
 nav a:hover{border-bottom: 0.3em solid black;}
 nav a.current{border-bottom: 0.3em solid white; color: white; background-color: black;}
 main{grid-area: main; background-color: blueviolet; overflow: auto;}
-article{margin: 2em; padding: 2em; background-color: white;}
+article {margin: 2em; padding: 2em; background-color: white;}
+/*article.recipe{}*/
 article ol li {margin-top: 0.5em;}
+article.images{display: flex; flex-flow: row wrap;}
+article.rimages{display: flex; flex-flow: row-reverse wrap;}
+article figure{width: 10%; height: 10%;}
 aside{grid-area: aside; background-color: burlywood;}
 footer{grid-area: footer; background-color: gray;}
 /* width */
