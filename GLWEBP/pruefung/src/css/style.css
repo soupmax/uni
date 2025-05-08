@@ -11,14 +11,44 @@ nav {grid-area: nav; background-color: white; display: flex; flex-flow: row wrap
 nav a {background-color: transparent; padding: 1em; text-decoration: none;margin: 0 1em 0 1em; color: black;}
 nav a:hover{border-bottom: 0.3em solid black;}
 nav a.current{border-bottom: 0.3em solid white; color: white; background-color: black;}
-main{grid-area: main; background-color: blueviolet; overflow: auto;}
+main{grid-area: main; background-color: lightgray; overflow: auto;}
+main.images{
+  display: flex;
+  flex-direction: column;
+}
+  .imageblock {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.imageblock img {
+  width: 300px;
+  max-height: 300px;
+  height: auto;
+  border-radius: 5px;
+}
+.imageblock.left {
+  flex-direction: row;
+  text-align: left;
+}
+
+.imageblock.right {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+figcaption {
+  padding: 0 15px;
+  text-align: left;
+}
+figcaption::first-line {font-size: large; font-weight: bolder; text-decoration: underline;}
 article {margin: 2em; padding: 2em; background-color: white;}
 /*article.recipe{}*/
 article ol li {margin-top: 0.5em;}
-article.images{display: flex; flex-flow: row wrap;}
-article.rimages{display: flex; flex-flow: row-reverse wrap;}
-article figure{width: 10%; height: 10%;}
-aside{grid-area: aside; background-color: burlywood;}
+aside{grid-area: aside; background-color: gainsboro;}
 footer{grid-area: footer; background-color: gray;}
 /* width */
 body ::-webkit-scrollbar {
