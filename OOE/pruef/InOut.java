@@ -1,3 +1,5 @@
+package pruef;
+
 import org.json.JSONObject;
 import org.json.JSONException;
 import java.io.FileWriter;

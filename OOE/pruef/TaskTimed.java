@@ -1,3 +1,5 @@
+package pruef;
+
 import java.time.*;
 
 public class TaskTimed extends Task {
