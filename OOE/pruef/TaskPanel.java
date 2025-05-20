@@ -23,7 +23,7 @@ public class TaskPanel extends JPanel {
         descriptionArea.setBackground(getBackground());
 
         completedCheckBox = new JCheckBox("Erledigt", task.completed);
-        completedCheckBox.setEnabled(false); // Nur anzeigen, nicht bearbeitbar
+        completedCheckBox.setEnabled(task.completed); // Nur anzeigen, nicht bearbeitbar
 
         add(titleLabel, BorderLayout.NORTH);
         add(new JScrollPane(descriptionArea), BorderLayout.CENTER);

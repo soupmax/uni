@@ -18,5 +18,8 @@ public class Task {
     }
 
     public Task() {
+        this.title = "Einkaufen";
+        this.description = "Milch, Brot, Eier besorgen";
+        this.completed = false;
     }
 }

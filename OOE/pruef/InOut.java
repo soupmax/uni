@@ -1,11 +1,16 @@
 package pruef;
 
 import org.json.JSONObject;
+
+import netscape.javascript.JSObject;
+
 import org.json.JSONException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+
 import org.json.JSONArray;
 
 public class InOut {
@@ -13,12 +18,13 @@ public class InOut {
         JSONArray taskArray = new JSONArray();
 
         for (Task task : tasks) {
-            JSONObject json = new JSONObject();
-            json.put("title", task.title);
-            json.put("description", task.description);
-            json.put("completed", task.completed);
-
-            taskArray.put(json);
+            if (task instanceof TaskTimed) {
+                taskArray.put(taskTimedToJSON(task));
+            } else if (task instanceof TaskSimple) {
+                taskArray.put(taskSimpleToJSON(task));
+            } else if (task instanceof Task) {
+                taskArray.put(taskToJSON(task));
+            }
         }
 
         try (FileWriter file = new FileWriter(filename)) {
@@ -42,6 +48,12 @@ public class InOut {
                 String description = json.getString("description");
                 boolean completed = json.getBoolean("completed");
 
+                if (json.has("dueDate")) {
+                    // es ist eine TaskTimed
+                    LocalDate dueDate = LocalDate.parse(json.getString("dueDate"));
+                    tasks[i] = new TaskTimed(title, description, dueDate, completed);
+                    continue;
+                }
                 tasks[i] = new Task(title, description, completed);
             }
 
@@ -50,5 +62,27 @@ public class InOut {
             e.printStackTrace();
             return new Task[0]; // Rückgabe eines leeren Arrays im Fehlerfall
         }
+    }
+
+    private static JSONObject taskToJSON(Task t) {
+        JSONObject json = new JSONObject();
+        json.put("title", t.title);
+        json.put("description", t.description);
+        json.put("completed", t.completed);
+
+        return json;
+    }
+
+    private static JSONObject taskTimedToJSON(TaskTimed t) {
+        JSONObject json = TaskToJSON(t);
+        json.put("dueDate", t.dueDate.toString);
+
+        return json;
+    }
+
+    private static JSONObject taskSimpleToJSON(TaskTimed t) {
+        JSONObject json = TaskToJSON(t);
+
+        return json;
     }
 }
