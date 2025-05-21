@@ -1,9 +1,4 @@
-package pruef;
-
 import org.json.JSONObject;
-
-import netscape.javascript.JSObject;
-
 import org.json.JSONException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,9 +14,9 @@ public class InOut {
 
         for (Task task : tasks) {
             if (task instanceof TaskTimed) {
-                taskArray.put(taskTimedToJSON(task));
+                taskArray.put(taskTimedToJSON((TaskTimed) task));
             } else if (task instanceof TaskSimple) {
-                taskArray.put(taskSimpleToJSON(task));
+                taskArray.put(taskSimpleToJSON((TaskSimple) task));
             } else if (task instanceof Task) {
                 taskArray.put(taskToJSON(task));
             }
@@ -74,14 +69,14 @@ public class InOut {
     }
 
     private static JSONObject taskTimedToJSON(TaskTimed t) {
-        JSONObject json = TaskToJSON(t);
-        json.put("dueDate", t.dueDate.toString);
+        JSONObject json = taskToJSON(t);
+        json.put("dueDate", t.dueDate.toString());
 
         return json;
     }
 
-    private static JSONObject taskSimpleToJSON(TaskTimed t) {
-        JSONObject json = TaskToJSON(t);
+    private static JSONObject taskSimpleToJSON(TaskSimple t) {
+        JSONObject json = taskToJSON(t);
 
         return json;
     }

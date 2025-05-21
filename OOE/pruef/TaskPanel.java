@@ -1,5 +1,3 @@
-package pruef;
-
 import javax.swing.*;
 import java.awt.*;
 

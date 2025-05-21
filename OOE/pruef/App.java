@@ -1,5 +1,3 @@
-package pruef;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,9 +15,13 @@ public class App {
 
         JFrame frame = new JFrame("Task Viewer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 200);
+        // frame.setSize(400, 200);
         frame.add(taskPanel);
         frame.add(ttaskPanel);
+
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        gd.setFullScreenWindow(frame);
+
         frame.setVisible(true);
 
         System.out.println("end");
