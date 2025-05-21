@@ -30,7 +30,7 @@ public class InOut {
     }
 
     // Methode zum Laden mehrerer Aufgaben aus einer Datei
-    public static Task[] loadTasks(String filename) {
+    public static Task[] loadTasks(String filename, String cat) {
         try {
             String content = new String(Files.readAllBytes(Paths.get(filename)));
             JSONArray taskArray = new JSONArray(content);
@@ -39,9 +39,15 @@ public class InOut {
             for (int i = 0; i < taskArray.length(); i++) {
                 JSONObject json = taskArray.getJSONObject(i);
 
+                String category = json.getString("category");
                 String title = json.getString("title");
                 String description = json.getString("description");
                 boolean completed = json.getBoolean("completed");
+
+                // skip tasks in anderen kategorien (werden in anderen panels angezeigt)
+                if (category != cat) {
+                    continue;
+                }
 
                 if (json.has("dueDate")) {
                     // es ist eine TaskTimed

@@ -42,7 +42,7 @@ public class GridView extends JPanel {
         flowPanel.repaint();
     }
 
-    public void reloadFromTasks(List<Task> tasks) {
+    public void reloadFromTasks(Task[] tasks) {
         clearPanels();
 
         for (Task task : tasks) {

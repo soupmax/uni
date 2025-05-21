@@ -13,8 +13,8 @@ public class App {
         JTabbedPane tabbedPane = new JTabbedPane();
 
         // Tabs hinzufügen – eigene Klassen
-        tabbedPane.addTab("Aufgaben", new TabPanel());
-        tabbedPane.addTab("Statistik", new TabPanel());
+        tabbedPane.addTab("Arbeit", new TabPanel("Arbeit"));
+        tabbedPane.addTab("Uni", new TabPanel("Uni"));
         frame.add(tabbedPane);
 
         // frame.setSize(400, 200);add(tabbedPane);
