@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
 
 public class TaskPanel extends JPanel {
@@ -7,7 +9,8 @@ public class TaskPanel extends JPanel {
     private JCheckBox completedCheckBox;
 
     public TaskPanel(Task task) {
-        setLayout(new BorderLayout());
+        // setLayout(new BorderLayout());
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createLineBorder(Color.GRAY));
         setPreferredSize(new Dimension(300, 100));
 
@@ -23,8 +26,14 @@ public class TaskPanel extends JPanel {
         completedCheckBox = new JCheckBox("Erledigt", task.completed);
         completedCheckBox.setEnabled(task.completed); // Nur anzeigen, nicht bearbeitbar
 
-        add(titleLabel, BorderLayout.NORTH);
-        add(new JScrollPane(descriptionArea), BorderLayout.CENTER);
-        add(completedCheckBox, BorderLayout.SOUTH);
+        add(titleLabel);
+        add(new JScrollPane(descriptionArea));
+        AddExtraComponent(task);
+
+        add(completedCheckBox);
+    }
+
+    protected void AddExtraComponent(Task task) {
+        return;
     }
 }

@@ -17,7 +17,7 @@ public class TaskTimed extends Task {
     }
 
     public TaskTimed() {
-        super();
+        super("tasktimed", "das ist ein test");
         this.dueDate = LocalDateTime.now().toLocalDate();
         this.priority = false;
     }

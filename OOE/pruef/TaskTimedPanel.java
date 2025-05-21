@@ -8,15 +8,17 @@ public class TaskTimedPanel extends TaskPanel {
     public TaskTimedPanel(TaskTimed task) {
         super(task); // ruft den Konstruktor von TaskPanel auf
 
-        // Neues Panel unten ergänzen
-        JPanel extraPanel = new JPanel(new GridLayout(2, 1));
         dueDateLabel = new JLabel("Fällig bis: " + task.dueDate.toString());
         priorityLabel = new JLabel("Priorität: " + task.priority);
 
-        extraPanel.add(dueDateLabel);
-        extraPanel.add(priorityLabel);
+    }
 
-        // Füge das zusätzliche Panel unten hinzu
-        add(extraPanel, BorderLayout.EAST);
+    @Override
+    protected void AddExtraComponent(Task task) {
+        dueDateLabel = new JLabel("Fällig bis: " + ((TaskTimed) task).dueDate.toString());
+        priorityLabel = new JLabel("Priorität: " + ((TaskTimed) task).priority);
+
+        add(dueDateLabel);
+        add(priorityLabel);
     }
 }
