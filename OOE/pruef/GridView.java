@@ -35,4 +35,28 @@ public class GridView extends JPanel {
             addPanel(panel);
         }
     }
+
+    public void clearPanels() {
+        flowPanel.removeAll();
+        flowPanel.revalidate();
+        flowPanel.repaint();
+    }
+
+    public void reloadFromTasks(List<Task> tasks) {
+        clearPanels();
+
+        for (Task task : tasks) {
+            JPanel panel;
+            if (task instanceof TaskTimed) {
+                panel = new TaskTimedPanel((TaskTimed) task);
+            } else {
+                panel = new TaskPanel(task);
+            }
+            addPanel(panel);
+        }
+
+        // Optional: Add the "+" button after loading
+        addPanel(new Button("addTask"));
+    }
+
 }

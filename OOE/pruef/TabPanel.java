@@ -1,20 +1,28 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class TabPanel extends JPanel {
+    private GridView grid;
+
     public TabPanel() {
         setLayout(new BorderLayout());
 
-        Task task = new Task();
-        TaskPanel taskPanel = new TaskPanel(task);
+        grid = new GridView();
 
-        TaskTimed ttask = new TaskTimed();
-        TaskTimedPanel ttaskPanel = new TaskTimedPanel(ttask);
-
-        GridView grid = new GridView();
-        grid.addPanel(taskPanel);
-        grid.addPanel(ttaskPanel);
+        // Initiale Ladung
+        List<Task> loadedTasks = loadTasks(); // <- dein Speicher-Ladesystem
+        grid.reloadFromTasks(loadedTasks);
 
         add(grid, BorderLayout.CENTER);
+    }
+
+    public void reload() {
+        List<Task> loadedTasks = loadTasks();
+        grid.reloadFromTasks(loadedTasks);
+    }
+
+    private List<Task> loadTasks() {
+        List<Task> tasks = new List<Task>();
     }
 }

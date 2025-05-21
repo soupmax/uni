@@ -7,8 +7,8 @@ public class App {
 
         JFrame frame = new JFrame("Task Viewer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        gd.setFullScreenWindow(frame);
+        frame.setMinimumSize(new Dimension(300, 300));
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Fenster maximieren
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
