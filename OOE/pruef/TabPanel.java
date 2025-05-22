@@ -9,7 +9,7 @@ public class TabPanel extends JPanel {
         this.category = category;
         setLayout(new BorderLayout());
 
-        grid = new GridView();
+        grid = new GridView(category);
 
         // Initiale Ladung
         reload();

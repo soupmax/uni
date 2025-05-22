@@ -13,8 +13,10 @@ public class GridView extends JPanel {
     private JPanel doneContent;
 
     private JPanel tasksWrapperPanel;
+    private String category;
 
-    public GridView() {
+    public GridView(String category) {
+        this.category = category;
         setLayout(new BorderLayout());
 
         // Oben: fester Button-Bereich
@@ -57,6 +59,17 @@ public class GridView extends JPanel {
         return wrapper;
     }
 
+    private JPanel createPanelForTask(Task task) {
+        Runnable refresh = () -> putNewTasks(InOut.loadCategoryTasks(category));
+
+        if (task instanceof TaskTimed)
+            return new TaskTimedPanel((TaskTimed) task, refresh);
+        else if (task instanceof TaskSimple)
+            return new TaskSimplePanel((TaskSimple) task, refresh);
+        else
+            return new TaskPanel(task, refresh);
+    }
+
     public void putNewTasks(Task[] tasks) {
         // Inhalte leeren
         priorityContent.removeAll();
@@ -68,14 +81,7 @@ public class GridView extends JPanel {
                 if (task == null)
                     continue;
 
-                JPanel panel;
-                if (task instanceof TaskTimed) {
-                    panel = new TaskTimedPanel((TaskTimed) task);
-                } else if (task instanceof TaskSimple) {
-                    panel = new TaskSimplePanel((TaskSimple) task);
-                } else {
-                    panel = new TaskPanel(task);
-                }
+                JPanel panel = createPanelForTask(task);
 
                 // Styling für Task-Panels
                 panel.setMaximumSize(new Dimension(600, 150)); // breite begrenzen

@@ -7,10 +7,12 @@ public class TaskPanel extends JPanel {
     private JTextArea descriptionArea;
     private JCheckBox completedCheckBox;
     private Task task;
+    private Runnable onStatusChange;
 
-    public TaskPanel(Task task) {
+    public TaskPanel(Task task, Runnable onStatusChange) {
         this.task = task;
-        // setLayout(new BorderLayout());
+        this.onStatusChange = onStatusChange;
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createLineBorder(Color.GRAY));
         setPreferredSize(new Dimension(300, 100));
@@ -25,7 +27,15 @@ public class TaskPanel extends JPanel {
         descriptionArea.setBackground(getBackground());
 
         completedCheckBox = new JCheckBox("Erledigt", task.completed);
-        completedCheckBox.setEnabled(task.completed); // Nur anzeigen, nicht bearbeitbar
+        completedCheckBox.setEnabled(!task.completed); // Nur anzeigen, nicht bearbeitbar
+
+        completedCheckBox.addActionListener(e -> {
+            task.completed = true; // Status setzen
+            InOut.updateTask(task);
+            if (onStatusChange != null) {
+                onStatusChange.run(); // GridView neu laden
+            }
+        });
 
         add(titleLabel);
         add(new JScrollPane(descriptionArea));

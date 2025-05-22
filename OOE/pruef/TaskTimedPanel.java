@@ -4,8 +4,8 @@ public class TaskTimedPanel extends TaskPanel {
     private JLabel dueDateLabel;
     private JLabel priorityLabel;
 
-    public TaskTimedPanel(TaskTimed task) {
-        super(task); // ruft den Konstruktor von TaskPanel auf
+    public TaskTimedPanel(TaskTimed task, Runnable onStatusChange) {
+        super(task, onStatusChange); // ruft den Konstruktor von TaskPanel auf
 
         dueDateLabel = new JLabel("Fällig bis: " + task.dueDate.toString());
         priorityLabel = new JLabel("Priorität: " + task.priority);

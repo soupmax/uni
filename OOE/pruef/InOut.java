@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -139,6 +140,27 @@ public class InOut {
                 .toList();
 
         saveAllTasks(filteredTasks.toArray(new Task[0]));
+    }
+
+    public static void updateTask(Task updatedTask) {
+        Task[] tasks = loadAllTasks();
+
+        if (tasks == null)
+            return;
+
+        List<Task> updatedList = new ArrayList<>();
+
+        for (Task t : tasks) {
+            if (t.title.equals(updatedTask.title) &&
+                    t.category.equals(updatedTask.category) &&
+                    t.description.equals(updatedTask.description)) {
+                updatedList.add(updatedTask); // ersetze alte durch neue Task
+            } else {
+                updatedList.add(t); // sonst unverändert übernehmen
+            }
+        }
+
+        saveAllTasks(updatedList.toArray(new Task[0]));
     }
 
     private static Task JSONToTask(JSONObject json) {
