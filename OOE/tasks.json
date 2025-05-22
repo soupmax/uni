@@ -33,5 +33,12 @@
         "category": "Mensa",
         "title": "essen",
         "priority": false
+    },
+    {
+        "description": "hallo",
+        "completed": false,
+        "category": "Test",
+        "title": "test nummer 1",
+        "priority": true
     }
 ]

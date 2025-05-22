@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.json.JSONArray;
 
@@ -65,6 +68,14 @@ public class InOut {
             e.printStackTrace();
             return new Task[0]; // Rückgabe eines leeren Arrays im Fehlerfall
         }
+    }
+
+    public static String[] getAllTabs() {
+        Task[] tasks = loadAllTasks();
+        return Arrays.stream(tasks)
+                .map(t -> t.category)
+                .distinct()
+                .toArray(String[]::new);
     }
 
     // Methode zum Laden mehrerer Aufgaben aus einer Datei

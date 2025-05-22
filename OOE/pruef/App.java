@@ -11,8 +11,10 @@ public class App {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Fenster maximieren
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Arbeit", new TabPanel("Arbeit"));
-        tabbedPane.addTab("Uni", new TabPanel("Uni"));
+        String[] categories = InOut.getAllTabs();
+        for (String category : categories) {
+            tabbedPane.addTab(category, new TabPanel(category));
+        }
         tabbedPane.addTab("+", new JPanel());
 
         final int[] previousIndex = { 0 };
