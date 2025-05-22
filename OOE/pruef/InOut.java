@@ -8,13 +8,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 import org.json.JSONArray;
 
 public class InOut {
+    private static String fileName = "./tasks.json";
+
     public static void saveTask(Task task) {
         JSONArray taskArray = new JSONArray();
-        String fileName = "./tasks.json";
         Task[] existingTasks = null;
         Task[] allTasks = null;
 
@@ -46,8 +48,27 @@ public class InOut {
         }
     }
 
+    public static void saveAllTasks(Task[] tasks) {
+        JSONArray arr = new JSONArray();
+
+        for (Task t : tasks) {
+            if (t instanceof TaskTimed) {
+                arr.put(taskTimedToJSON((TaskTimed) t));
+            } else if (t instanceof TaskSimple) {
+                arr.put(taskSimpleToJSON((TaskSimple) t));
+            } else {
+                arr.put(taskToJSON(t));
+            }
+        }
+
+        try (FileWriter file = new FileWriter(fileName)) {
+            file.write(arr.toString(4)); // schön formatiert
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static Task[] loadAllTasks() {
-        String fileName = "./tasks.json";
         File f = new File(fileName);
         if (!f.exists() || f.length() < 1) {
             return null;
@@ -78,7 +99,6 @@ public class InOut {
 
     // Methode zum Laden mehrerer Aufgaben aus einer Datei
     public static Task[] loadCategoryTasks(String cat) {
-        String fileName = "./tasks.json";
         File f = new File(fileName);
         if (!f.exists() || f.length() < 1) {
             return null;
@@ -105,6 +125,20 @@ public class InOut {
             e.printStackTrace();
             return new Task[0]; // Rückgabe eines leeren Arrays im Fehlerfall
         }
+    }
+
+    public static void deleteCategoryTasks(String category) {
+        Task[] tasks = loadAllTasks();
+
+        if (tasks == null)
+            return;
+
+        // Alle Tasks außer der zu löschenden Kategorie behalten
+        List<Task> filteredTasks = Arrays.stream(tasks)
+                .filter(t -> !t.category.equals(category))
+                .toList();
+
+        saveAllTasks(filteredTasks.toArray(new Task[0]));
     }
 
     private static Task JSONToTask(JSONObject json) {

@@ -1,54 +1,73 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class GridView extends JPanel {
 
-    private JPanel flowPanel;
-    private JScrollPane scrollPane;
+    private JPanel buttonPanel;
+    private JPanel priorityPanel;
+    private JPanel openPanel;
+    private JPanel donePanel;
+
+    private JPanel priorityContent;
+    private JPanel openContent;
+    private JPanel doneContent;
+
+    private JPanel tasksWrapperPanel;
 
     public GridView() {
         setLayout(new BorderLayout());
 
-        // FlowLayout mit linker Ausrichtung & vertikalem Umbruch
-        flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        flowPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // Oben: fester Button-Bereich
+        buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttonPanel.add(new CButton("addTask"));
+        buttonPanel.add(new CButton("deletePanel"));
+        add(buttonPanel, BorderLayout.NORTH);
 
-        // ScrollPane
-        scrollPane = new JScrollPane(flowPanel);
+        // Panels für die Inhalte der Kategorien
+        priorityContent = new JPanel();
+        openContent = new JPanel();
+        doneContent = new JPanel();
+
+        // Panels für die drei Kategorien (mit Überschrift und Inhalt)
+        priorityPanel = makeCategoryPanel("Priorität", priorityContent);
+        openPanel = makeCategoryPanel("Unerledigt", openContent);
+        donePanel = makeCategoryPanel("Erledigt", doneContent);
+
+        // Wrapper für alle Kategorien
+        tasksWrapperPanel = new JPanel();
+        tasksWrapperPanel.setLayout(new GridLayout(1, 3));
+        tasksWrapperPanel.add(priorityPanel);
+        tasksWrapperPanel.add(openPanel);
+        tasksWrapperPanel.add(donePanel);
+
+        // ScrollPane um alle Aufgabenbereiche
+        JScrollPane scrollPane = new JScrollPane(tasksWrapperPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void addPanel(JPanel panel) {
-        panel.setPreferredSize(new Dimension(300, 200)); // Größe der Einzelpanels
-        panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        flowPanel.add(panel);
-        flowPanel.revalidate();
-        flowPanel.repaint();
-    }
+    private JPanel makeCategoryPanel(String title, JPanel content) {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBorder(BorderFactory.createTitledBorder(title));
 
-    public void addPanels(List<JPanel> panels) {
-        for (JPanel panel : panels) {
-            addPanel(panel);
-        }
-    }
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        wrapper.add(content, BorderLayout.CENTER);
 
-    public void clearPanels() {
-        flowPanel.removeAll();
-        flowPanel.revalidate();
-        flowPanel.repaint();
+        return wrapper;
     }
 
     public void putNewTasks(Task[] tasks) {
-        clearPanels();
+        // Inhalte leeren
+        priorityContent.removeAll();
+        openContent.removeAll();
+        doneContent.removeAll();
+
         if (tasks != null) {
             for (Task task : tasks) {
-                if (task == null) {
+                if (task == null)
                     continue;
-                }
+
                 JPanel panel;
                 if (task instanceof TaskTimed) {
                     panel = new TaskTimedPanel((TaskTimed) task);
@@ -57,12 +76,24 @@ public class GridView extends JPanel {
                 } else {
                     panel = new TaskPanel(task);
                 }
-                addPanel(panel);
-            }
-        } else {
-            System.out.println("tasks sind null");
-        }
-        addPanel(new Button("addTask"));
-    }
 
+                // Styling für Task-Panels
+                panel.setMaximumSize(new Dimension(600, 150)); // breite begrenzen
+                panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+                // Kategorisieren
+                if (task.completed) {
+                    doneContent.add(panel);
+                } else if (task.priority) {
+                    priorityContent.add(panel);
+                } else {
+                    openContent.add(panel);
+                }
+            }
+        }
+
+        revalidate();
+        repaint();
+    }
 }
