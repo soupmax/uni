@@ -6,8 +6,10 @@ public class TaskPanel extends JPanel {
     private JLabel titleLabel;
     private JTextArea descriptionArea;
     private JCheckBox completedCheckBox;
+    private Task task;
 
     public TaskPanel(Task task) {
+        this.task = task;
         // setLayout(new BorderLayout());
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -34,5 +36,9 @@ public class TaskPanel extends JPanel {
 
     protected void AddExtraComponent(Task task) {
         return;
+    }
+
+    public Task getTask() {
+        return task;
     }
 }
