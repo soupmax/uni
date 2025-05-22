@@ -34,13 +34,15 @@ public class Button extends JPanel {
 
     private void openInputDialog() {
         Frame owner = (Frame) SwingUtilities.getWindowAncestor(this);
-        TaskInputDialog dialog = new TaskInputDialog(owner);
+        TabPanel tab = (TabPanel) SwingUtilities.getAncestorOfClass(TabPanel.class, this);
+        TaskInputDialog dialog = new TaskInputDialog(owner, tab.getCategory());
+
         Task newTask = dialog.showDialog();
 
         if (newTask != null) {
-            System.out.println(
-                    "Neue Aufgabe: " + newTask.title + ", " + newTask.description + ", erledigt: " + newTask.completed);
-            // Optional: Füge den Task irgendwo hinzu
+            System.out.println("Neue Aufgabe");
+            InOut.saveTask(newTask);
+            tab.reload();
         } else {
             System.out.println("Abgebrochen.");
         }

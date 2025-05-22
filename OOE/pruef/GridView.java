@@ -42,20 +42,26 @@ public class GridView extends JPanel {
         flowPanel.repaint();
     }
 
-    public void reloadFromTasks(Task[] tasks) {
+    public void putNewTasks(Task[] tasks) {
         clearPanels();
-
-        for (Task task : tasks) {
-            JPanel panel;
-            if (task instanceof TaskTimed) {
-                panel = new TaskTimedPanel((TaskTimed) task);
-            } else {
-                panel = new TaskPanel(task);
+        if (tasks != null) {
+            for (Task task : tasks) {
+                if (task == null) {
+                    continue;
+                }
+                JPanel panel;
+                if (task instanceof TaskTimed) {
+                    panel = new TaskTimedPanel((TaskTimed) task);
+                } else if (task instanceof TaskSimple) {
+                    panel = new TaskSimplePanel((TaskSimple) task);
+                } else {
+                    panel = new TaskPanel(task);
+                }
+                addPanel(panel);
             }
-            addPanel(panel);
+        } else {
+            System.out.println("tasks sind null");
         }
-
-        // Optional: Add the "+" button after loading
         addPanel(new Button("addTask"));
     }
 

@@ -4,10 +4,10 @@ import java.awt.*;
 public class TaskInputDialog extends JDialog {
     private JTextField titleField;
     private JTextArea descriptionArea;
-    private JCheckBox completedBox;
+    private JCheckBox priorityBox;
     private Task resultTask;
 
-    public TaskInputDialog(Frame owner) {
+    public TaskInputDialog(Frame owner, String category) {
         super(owner, "Neue Aufgabe erstellen", true);
         setLayout(new BorderLayout());
         setSize(300, 250);
@@ -17,13 +17,13 @@ public class TaskInputDialog extends JDialog {
         JPanel inputPanel = new JPanel(new GridLayout(0, 1, 5, 5));
         titleField = new JTextField();
         descriptionArea = new JTextArea(4, 20);
-        completedBox = new JCheckBox("Erledigt");
+        priorityBox = new JCheckBox("Priorität:");
 
         inputPanel.add(new JLabel("Titel:"));
         inputPanel.add(titleField);
         inputPanel.add(new JLabel("Beschreibung:"));
         inputPanel.add(new JScrollPane(descriptionArea));
-        inputPanel.add(completedBox);
+        inputPanel.add(priorityBox);
 
         add(inputPanel, BorderLayout.CENTER);
 
@@ -33,10 +33,11 @@ public class TaskInputDialog extends JDialog {
         JButton cancelButton = new JButton("Abbrechen");
 
         okButton.addActionListener(e -> {
-            resultTask = new Task(
+            resultTask = new TaskSimple(
+                    category,
                     titleField.getText(),
                     descriptionArea.getText(),
-                    completedBox.isSelected());
+                    priorityBox.isSelected());
             dispose();
         });
 

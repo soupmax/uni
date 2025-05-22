@@ -11,10 +11,37 @@ public class App {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Fenster maximieren
 
         JTabbedPane tabbedPane = new JTabbedPane();
-
-        // Tabs hinzufügen – eigene Klassen
         tabbedPane.addTab("Arbeit", new TabPanel("Arbeit"));
         tabbedPane.addTab("Uni", new TabPanel("Uni"));
+        tabbedPane.addTab("+", new JPanel());
+
+        final int[] previousIndex = { 0 };
+
+        tabbedPane.addChangeListener(e -> {
+            int index = tabbedPane.getSelectedIndex();
+
+            if (index == tabbedPane.getTabCount() - 1) { // "+" Tab
+                String newCategory = JOptionPane.showInputDialog(
+                        null, "Neue Kategorie eingeben:", "Neuer Tab", JOptionPane.PLAIN_MESSAGE);
+
+                if (newCategory != null && !newCategory.trim().isEmpty()) {
+                    // "+"-Tab entfernen
+                    tabbedPane.removeTabAt(tabbedPane.getTabCount() - 1);
+                    tabbedPane.addTab(newCategory, new TabPanel(newCategory));
+                    tabbedPane.addTab("+", new JPanel());
+
+                    // Zum neuen Tab springen
+                    tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 2);
+                    previousIndex[0] = tabbedPane.getSelectedIndex();
+                } else {
+                    // Falls abgebrochen: vorherigen Tab wieder auswählen
+                    tabbedPane.setSelectedIndex(previousIndex[0]);
+                }
+            } else {
+                previousIndex[0] = index;
+            }
+        });
+
         frame.add(tabbedPane);
 
         // frame.setSize(400, 200);add(tabbedPane);

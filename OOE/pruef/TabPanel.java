@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class TabPanel extends JPanel {
     private GridView grid;
@@ -13,18 +12,17 @@ public class TabPanel extends JPanel {
         grid = new GridView();
 
         // Initiale Ladung
-        Task[] loadedTasks = loadTasks(); // <- dein Speicher-Ladesystem
-        grid.reloadFromTasks(loadedTasks);
+        reload();
 
         add(grid, BorderLayout.CENTER);
     }
 
     public void reload() {
-        Task[] loadedTasks = loadTasks();
-        grid.reloadFromTasks(loadedTasks);
+        Task[] loadedTasks = InOut.loadCategoryTasks(category);
+        grid.putNewTasks(loadedTasks);
     }
 
-    private Task[] loadTasks() {
-        return InOut.loadTasks("tasks.json", category);
+    public String getCategory() {
+        return category;
     }
 }

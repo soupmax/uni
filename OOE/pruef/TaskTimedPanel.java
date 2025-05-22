@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 
 public class TaskTimedPanel extends TaskPanel {
     private JLabel dueDateLabel;
