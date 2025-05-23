@@ -37,8 +37,11 @@ public class TaskInputDialog extends JDialog {
         // Eingabefelder
         JPanel inputPanel = new JPanel(new GridLayout(0, 1, 5, 5));
         titleField = new JTextField();
+        titleField.setDocument(new LimitedDocument(50));
         descriptionArea = new JTextArea(4, 20);
+        descriptionArea.setDocument(new LimitedDocument(200));
         dueDateField = new JTextField(); // Neues Feld für Fälligkeitsdatum
+        dueDateField.setDocument(new LimitedDocument(10));
 
         inputPanel.add(new JLabel("Titel:"));
         inputPanel.add(titleField);

@@ -34,8 +34,6 @@ public class App {
      * @param args Kommandozeilenargumente (werden nicht verwendet)
      */
     public static void main(String[] args) {
-        System.out.println("start");
-
         JFrame frame = new JFrame("Task Viewer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(300, 300));
@@ -82,7 +80,5 @@ public class App {
 
         frame.add(tabbedPane);
         frame.setVisible(true);
-
-        System.out.println("end");
     }
 }
