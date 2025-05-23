@@ -5,6 +5,8 @@ import javax.swing.*;
  * {@link TaskPanel},
  * die zusätzlich das Fälligkeitsdatum einer zeitgebundenen
  * Aufgabe anzeigt.
+ * 
+ * @author Max
  */
 public class TaskTimedPanel extends TaskPanel {
     /** Label zur Anzeige des Fälligkeitsdatums. */

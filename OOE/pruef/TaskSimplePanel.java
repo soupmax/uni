@@ -5,6 +5,8 @@
  * <p>
  * Sie übernimmt die Darstellung und Funktionalität von {@link TaskPanel},
  * jedoch mit dem spezifizierten {@link TaskSimple}-Aufgabentyp.
+ * 
+ * @author Max
  */
 public class TaskSimplePanel extends TaskPanel {
 

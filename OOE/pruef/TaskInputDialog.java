@@ -15,6 +15,8 @@ import java.time.format.DateTimeParseException;
  * wird ein {@link TaskTimed}-Objekt zurückgegeben, sonst ein
  * {@link TaskSimple}.
  * </p>
+ * 
+ * @author Max
  */
 public class TaskInputDialog extends JDialog {
     private JTextField titleField;

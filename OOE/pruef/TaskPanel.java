@@ -6,6 +6,8 @@ import java.awt.*;
  * Es zeigt Titel, Beschreibung und Erledigt-Status an.
  * Optional können zusätzliche Informationen durch die Methode
  * {@code AddExtraComponent} ergänzt werden.
+ * 
+ * @author Max
  */
 public class TaskPanel extends JPanel {
 
@@ -13,7 +15,7 @@ public class TaskPanel extends JPanel {
     private JTextArea descriptionArea;
     private JCheckBox completedCheckBox;
     private Task task;
-    private Runnable onStatusChange;
+    private Runnable onStatusChange; // auch wenn die IDE sagt es kann weg, bitte nicht
 
     /**
      * Erstellt ein neues Panel zur Anzeige einer Aufgabe.

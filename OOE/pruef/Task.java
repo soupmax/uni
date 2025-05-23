@@ -1,6 +1,8 @@
 /**
  * Repräsentiert eine Aufgabe mit Titel, Beschreibung, Kategorie und
  * Status.
+ * 
+ * @author Max
  */
 public class Task {
     /** Kategorie der Aufgabe */

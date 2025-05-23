@@ -2,6 +2,8 @@ import java.time.*;
 
 /**
  * Erweiterung der Klasse Task, die zusätzlich ein Fälligkeitsdatum enthält.
+ * 
+ * @author Max
  */
 public class TaskTimed extends Task {
     /** Das Fälligkeitsdatum der Aufgabe */

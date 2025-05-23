@@ -6,6 +6,8 @@ import java.awt.*;
  * Zeitbegrenzt, Unerledigt und Erledigt.
  * Es enthält auch Bedienelemente zum Hinzufügen von Aufgaben und Löschen der
  * Kategorie.
+ * 
+ * @author Max
  */
 public class GridView extends JPanel {
 

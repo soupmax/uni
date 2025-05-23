@@ -1,6 +1,8 @@
 /**
  * Erweiterung der Klasse Task ohne zusätzliche Attribute.
  * Repräsentiert eine einfache Aufgabe.
+ * 
+ * @author Max
  */
 public class TaskSimple extends Task {
 

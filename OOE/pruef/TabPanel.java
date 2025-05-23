@@ -5,6 +5,8 @@ import java.awt.*;
  * Das {@code TabPanel} stellt ein Panel dar, das eine bestimmte Task-Kategorie
  * in einem Tab anzeigt.
  * Es enthält eine {@link GridView}, die alle Tasks dieser Kategorie darstellt.
+ * 
+ * @author Max
  */
 public class TabPanel extends JPanel {
     /** Die GridView zur Anzeige von Aufgaben. */
