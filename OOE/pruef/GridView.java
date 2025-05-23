@@ -3,18 +3,18 @@ import java.awt.*;
 
 /**
  * {@code GridView} ist ein JPanel, das Aufgaben in drei Kategorien anzeigt:
- * Priorität, Unerledigt und Erledigt.
+ * Zeitbegrenzt, Unerledigt und Erledigt.
  * Es enthält auch Bedienelemente zum Hinzufügen von Aufgaben und Löschen der
  * Kategorie.
  */
 public class GridView extends JPanel {
 
     private JPanel buttonPanel; // Bereich für Steuerbuttons (addTask, deletePanel)
-    private JPanel priorityPanel; // Panel mit Überschrift und Aufgaben mit Priorität
+    private JPanel timedPanel; // Panel mit Überschrift und Aufgaben mit Ablaufdatum
     private JPanel openPanel; // Panel mit Überschrift und offenen Aufgaben
     private JPanel donePanel; // Panel mit Überschrift und erledigten Aufgaben
 
-    private JPanel priorityContent; // Container für die Prioritätsaufgaben
+    private JPanel timedContent; // Container für die Aufgaben mit Ablaufdatum
     private JPanel openContent; // Container für offene Aufgaben
     private JPanel doneContent; // Container für erledigte Aufgaben
 
@@ -37,19 +37,19 @@ public class GridView extends JPanel {
         add(buttonPanel, BorderLayout.NORTH);
 
         // Inhaltspanels initialisieren
-        priorityContent = new JPanel();
+        timedContent = new JPanel();
         openContent = new JPanel();
         doneContent = new JPanel();
 
         // Kategorien-Panels mit Titel und Inhalt erstellen
-        priorityPanel = makeCategoryPanel("Priorität", priorityContent);
+        timedPanel = makeCategoryPanel("Zeitbregrenzt", timedContent);
         openPanel = makeCategoryPanel("Unerledigt", openContent);
         donePanel = makeCategoryPanel("Erledigt", doneContent);
 
         // Wrapper für alle Kategorien nebeneinander anordnen
         tasksWrapperPanel = new JPanel();
         tasksWrapperPanel.setLayout(new GridLayout(1, 3));
-        tasksWrapperPanel.add(priorityPanel);
+        tasksWrapperPanel.add(timedPanel);
         tasksWrapperPanel.add(openPanel);
         tasksWrapperPanel.add(donePanel);
 
@@ -63,7 +63,7 @@ public class GridView extends JPanel {
     /**
      * Erstellt ein Panel für eine Aufgaben-Kategorie mit Titel und Inhaltspanel.
      *
-     * @param title   Titel der Kategorie (z.B. "Priorität").
+     * @param title   Titel der Kategorie (z.B. "Erledigt").
      * @param content Inhaltspanel, das die Aufgaben dieser Kategorie enthält.
      * @return Ein JPanel mit Titel und Inhalt.
      */
@@ -103,7 +103,7 @@ public class GridView extends JPanel {
      */
     public void putNewTasks(Task[] tasks) {
         // Inhalte leeren
-        priorityContent.removeAll();
+        timedContent.removeAll();
         openContent.removeAll();
         doneContent.removeAll();
 
@@ -122,8 +122,8 @@ public class GridView extends JPanel {
                 // Zuordnung zur Kategorie
                 if (task.completed) {
                     doneContent.add(panel);
-                } else if (task.priority) {
-                    priorityContent.add(panel);
+                } else if (task instanceof TaskTimed) {
+                    timedContent.add(panel);
                 } else {
                     openContent.add(panel);
                 }

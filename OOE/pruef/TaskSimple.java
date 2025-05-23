@@ -10,11 +10,10 @@ public class TaskSimple extends Task {
      * @param category    Kategorie der Aufgabe
      * @param title       Titel der Aufgabe
      * @param description Beschreibung der Aufgabe
-     * @param priority    Prioritätsstatus der Aufgabe
      * @param completed   Erledigt-Status der Aufgabe
      */
-    public TaskSimple(String category, String title, String description, boolean priority, boolean completed) {
-        super(category, title, description, priority, completed);
+    public TaskSimple(String category, String title, String description, boolean completed) {
+        super(category, title, description, completed);
     }
 
     /**
@@ -23,24 +22,22 @@ public class TaskSimple extends Task {
      * @param category    Kategorie der Aufgabe
      * @param title       Titel der Aufgabe
      * @param description Beschreibung der Aufgabe
-     * @param priority    Prioritätsstatus der Aufgabe
      */
-    public TaskSimple(String category, String title, String description, boolean priority) {
-        super(category, title, description, priority);
+    public TaskSimple(String category, String title, String description) {
+        super(category, title, description);
     }
 
     /**
      * Gibt eine String-Darstellung der Aufgabe zurück.
      *
-     * @return Beschreibung der Aufgabe inklusive Kategorie, Titel, Beschreibung,
-     *         Priorität und Erledigt-Status
+     * @return Beschreibung der Aufgabe inklusive Kategorie, Titel, Beschreibung und
+     *         Erledigt-Status
      */
     @Override
     public String toString() {
         return "category: " + category + "\n" +
                 "title: " + title +
                 " description: " + description +
-                " priority: " + (priority ? "true" : "false") +
                 " completed: " + (completed ? "true" : "false");
     }
 }

@@ -237,15 +237,14 @@ public class InOut {
         String category = json.getString("category");
         String title = json.getString("title");
         String description = json.getString("description");
-        boolean priority = json.getBoolean("priority");
         boolean completed = json.getBoolean("completed");
 
         if (json.has("dueDate")) {
             // es ist eine TaskTimed
             LocalDate dueDate = LocalDate.parse(json.getString("dueDate"));
-            return new TaskTimed(category, title, description, dueDate, priority, completed);
+            return new TaskTimed(category, title, description, dueDate, completed);
         }
-        return new TaskSimple(category, title, description, priority, completed);
+        return new TaskSimple(category, title, description, completed);
     }
 
     /**
@@ -260,7 +259,6 @@ public class InOut {
         json.put("title", t.title);
         json.put("description", t.description);
         json.put("completed", t.completed);
-        json.put("priority", t.priority);
 
         return json;
     }

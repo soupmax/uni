@@ -3,15 +3,12 @@ import javax.swing.*;
 /**
  * {@code TaskTimedPanel} ist eine spezialisierte Variante von
  * {@link TaskPanel},
- * die zusätzlich das Fälligkeitsdatum und die Priorität einer zeitgebundenen
+ * die zusätzlich das Fälligkeitsdatum einer zeitgebundenen
  * Aufgabe anzeigt.
  */
 public class TaskTimedPanel extends TaskPanel {
     /** Label zur Anzeige des Fälligkeitsdatums. */
     private JLabel dueDateLabel;
-
-    /** Label zur Anzeige der Priorität. */
-    private JLabel priorityLabel;
 
     /**
      * Erstellt ein neues {@code TaskTimedPanel} für eine zeitgebundene Aufgabe.
@@ -26,7 +23,7 @@ public class TaskTimedPanel extends TaskPanel {
     }
 
     /**
-     * Fügt zusätzliche Komponenten (Fälligkeitsdatum und Priorität) dem Panel
+     * Fügt zusätzliche Komponenten (Fälligkeitsdatum) dem Panel
      * hinzu.
      *
      * @param task Die Aufgabe, von der die zusätzlichen Informationen angezeigt
@@ -35,9 +32,7 @@ public class TaskTimedPanel extends TaskPanel {
     @Override
     protected void AddExtraComponent(Task task) {
         dueDateLabel = new JLabel("Fällig bis: " + ((TaskTimed) task).dueDate.toString());
-        priorityLabel = new JLabel("Priorität: " + ((TaskTimed) task).priority);
 
         add(dueDateLabel);
-        add(priorityLabel);
     }
 }

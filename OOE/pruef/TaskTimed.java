@@ -14,12 +14,11 @@ public class TaskTimed extends Task {
      * @param title       Titel der Aufgabe
      * @param description Beschreibung der Aufgabe
      * @param dueDate     Fälligkeitsdatum der Aufgabe
-     * @param priority    Prioritätsstatus der Aufgabe
      * @param completed   Erledigt-Status der Aufgabe
      */
-    public TaskTimed(String category, String title, String description, LocalDate dueDate, boolean priority,
+    public TaskTimed(String category, String title, String description, LocalDate dueDate,
             boolean completed) {
-        super(category, title, description, priority, completed);
+        super(category, title, description, completed);
         this.dueDate = dueDate;
     }
 
@@ -30,10 +29,9 @@ public class TaskTimed extends Task {
      * @param title       Titel der Aufgabe
      * @param description Beschreibung der Aufgabe
      * @param dueDate     Fälligkeitsdatum der Aufgabe
-     * @param priority    Prioritätsstatus der Aufgabe
      */
-    public TaskTimed(String category, String title, String description, LocalDate dueDate, boolean priority) {
-        super(category, title, description, priority);
+    public TaskTimed(String category, String title, String description, LocalDate dueDate) {
+        super(category, title, description);
         this.dueDate = dueDate;
     }
 
@@ -41,14 +39,13 @@ public class TaskTimed extends Task {
      * Gibt eine String-Darstellung der Aufgabe zurück, inklusive Fälligkeitsdatum.
      *
      * @return Beschreibung der Aufgabe inklusive Kategorie, Titel, Beschreibung,
-     *         Priorität, Fälligkeitsdatum und Erledigt-Status
+     *         Fälligkeitsdatum und Erledigt-Status
      */
     @Override
     public String toString() {
         return "category: " + category + "\n" +
                 "title: " + title +
                 " description: " + description +
-                " priority: " + (priority ? "true" : "false") +
                 " dueDate: " + dueDate.toString() +
                 " completed: " + (completed ? "true" : "false");
     }
