@@ -8,20 +8,31 @@ import java.time.format.DateTimeParseException;
  * neuen {@link Task}.
  *
  * <p>
- * Zusätzlich zu Titel und Beschreibung kann optional ein
- * Fälligkeitsdatum
+ * Zusätzlich zu Titel und Beschreibung kann optional ein Fälligkeitsdatum
  * im Format {@code JJJJ-MM-TT} eingegeben werden. Wird ein gültiges Datum
- * eingegeben,
- * wird ein {@link TaskTimed}-Objekt zurückgegeben, sonst ein
+ * eingegeben, wird ein {@link TaskTimed}-Objekt zurückgegeben, sonst ein
  * {@link TaskSimple}.
+ * </p>
+ * 
+ * <p>
+ * Das Datum wird auf gültiges Format und darauf geprüft, dass es nicht in der
+ * Vergangenheit liegt.
  * </p>
  * 
  * @author Max
  */
 public class TaskInputDialog extends JDialog {
+
+    /** Texteingabefeld für den Aufgabentitel */
     private JTextField titleField;
+
+    /** Texteingabebereich für die Aufgabenbeschreibung */
     private JTextArea descriptionArea;
+
+    /** Texteingabefeld für das optionale Fälligkeitsdatum */
     private JTextField dueDateField;
+
+    /** Das Ergebnisobjekt (Task), das vom Dialog erstellt wurde */
     private Task resultTask;
 
     /**
@@ -33,17 +44,20 @@ public class TaskInputDialog extends JDialog {
     public TaskInputDialog(Frame owner, String category) {
         super(owner, "Neue Aufgabe erstellen", true);
         setLayout(new BorderLayout());
-        setSize(300, 300);
+        setSize(300, 350);
         setLocationRelativeTo(owner);
 
-        // Eingabefelder
+        // === Eingabebereich erstellen ===
         JPanel inputPanel = new JPanel(new GridLayout(0, 1, 5, 5));
+
         titleField = new JTextField();
-        titleField.setDocument(new LimitedDocument(50));
+        titleField.setDocument(new LimitedDocument(50)); // Max. 50 Zeichen
+
         descriptionArea = new JTextArea(4, 20);
-        descriptionArea.setDocument(new LimitedDocument(200));
-        dueDateField = new JTextField(); // Neues Feld für Fälligkeitsdatum
-        dueDateField.setDocument(new LimitedDocument(10));
+        descriptionArea.setDocument(new LimitedDocument(200)); // Max. 200 Zeichen
+
+        dueDateField = new JTextField();
+        dueDateField.setDocument(new LimitedDocument(10)); // Format JJJJ-MM-TT
 
         inputPanel.add(new JLabel("Titel:"));
         inputPanel.add(titleField);
@@ -54,11 +68,12 @@ public class TaskInputDialog extends JDialog {
 
         add(inputPanel, BorderLayout.CENTER);
 
-        // Buttons
+        // === Buttonbereich erstellen ===
         JPanel buttonPanel = new JPanel();
         JButton okButton = new JButton("Erstellen");
         JButton cancelButton = new JButton("Abbrechen");
 
+        // OK-Button: Eingaben validieren und Aufgabe erstellen
         okButton.addActionListener(e -> {
             String title = titleField.getText().trim();
             String description = descriptionArea.getText().trim();
@@ -67,20 +82,29 @@ public class TaskInputDialog extends JDialog {
             if (!dueDateText.isEmpty()) {
                 try {
                     LocalDate dueDate = LocalDate.parse(dueDateText);
+                    if (dueDate.isBefore(LocalDate.now())) {
+                        JOptionPane.showMessageDialog(this,
+                                "Das Fälligkeitsdatum darf nicht in der Vergangenheit liegen.",
+                                "Ungültiges Datum",
+                                JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
                     resultTask = new TaskTimed(category, title, description, dueDate);
                 } catch (DateTimeParseException ex) {
                     JOptionPane.showMessageDialog(this,
                             "Ungültiges Datum. Bitte im Format JJJJ-MM-TT eingeben.",
-                            "Fehler",
+                            "Ungültiges Datum",
                             JOptionPane.ERROR_MESSAGE);
-                    return; // abbrechen und Dialog nicht schließen
+                    return;
                 }
             } else {
                 resultTask = new TaskSimple(category, title, description);
             }
+
             dispose();
         });
 
+        // Abbrechen-Button: Dialog schließen ohne Aufgabe zu erstellen
         cancelButton.addActionListener(e -> {
             resultTask = null;
             dispose();
@@ -94,8 +118,8 @@ public class TaskInputDialog extends JDialog {
     /**
      * Zeigt den Dialog an und gibt die erstellte Aufgabe zurück.
      *
-     * @return ein {@link Task}-Objekt bei Bestätigung, sonst {@code null} bei
-     *         Abbruch
+     * @return ein {@link Task}-Objekt, wenn der Nutzer bestätigt;
+     *         {@code null}, wenn der Dialog abgebrochen wurde
      */
     public Task showDialog() {
         setVisible(true);

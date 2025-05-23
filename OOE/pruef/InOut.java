@@ -117,7 +117,7 @@ public class InOut {
                 JSONObject json = taskArray.getJSONObject(i);
                 tasks[i] = JSONToTask(json);
             }
-            return tasks;
+            return Utils.sortTasks(tasks);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             return new Task[0]; // Rückgabe eines leeren Arrays im Fehlerfall
@@ -172,7 +172,8 @@ public class InOut {
                 tasksList.add(t);
             }
 
-            return tasksList.toArray(new Task[0]);
+            return Utils.sortTasks(tasksList.toArray(new Task[0]));
+            // return tasksList.toArray(new Task[0]);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             return new Task[0]; // Rückgabe eines leeren Arrays im Fehlerfall
@@ -271,7 +272,7 @@ public class InOut {
      */
     private static JSONObject taskTimedToJSON(TaskTimed t) {
         JSONObject json = taskToJSON(t);
-        json.put("dueDate", t.dueDate.toString());
+        json.put("dueDate", t.getDueDate().toString());
 
         return json;
     }

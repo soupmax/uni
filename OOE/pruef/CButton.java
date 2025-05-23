@@ -81,7 +81,6 @@ public class CButton extends JPanel {
         Task newTask = dialog.showDialog();
 
         if (newTask != null) {
-            System.out.println("Neue Aufgabe");
             InOut.saveTask(newTask);
             tab.reload();
         } else {

@@ -2,10 +2,22 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * {@code TaskPanel} ist ein JPanel, das eine Aufgabe visuell darstellt.
- * Es zeigt Titel, Beschreibung und Erledigt-Status an.
- * Optional können zusätzliche Informationen durch die Methode
- * {@code AddExtraComponent} ergänzt werden.
+ * {@code TaskPanel} ist ein generisches Panel zur Darstellung einer
+ * {@link Task}.
+ * 
+ * <p>
+ * Es zeigt den Titel, die Beschreibung und den Status (erledigt/nicht erledigt)
+ * einer Aufgabe an.
+ * Optional kann die Methode {@link #AddExtraComponent(Task)} von Unterklassen
+ * überschrieben werden,
+ * um zusätzliche Informationen (z.&nbsp;B. Fälligkeitsdatum) anzuzeigen.
+ * </p>
+ * 
+ * <p>
+ * Wenn eine Aufgabe als erledigt markiert wird, wird die zugehörige
+ * Callback-Funktion ausgeführt
+ * und die Änderung dauerhaft gespeichert.
+ * </p>
  * 
  * @author Max
  */
@@ -15,14 +27,15 @@ public class TaskPanel extends JPanel {
     private JTextArea descriptionArea;
     private JCheckBox completedCheckBox;
     private Task task;
-    private Runnable onStatusChange; // auch wenn die IDE sagt es kann weg, bitte nicht
+    private Runnable onStatusChange; // Wird absichtlich nicht entfernt, dient als Trigger für UI-Aktualisierung
 
     /**
      * Erstellt ein neues Panel zur Anzeige einer Aufgabe.
      *
      * @param task           Die darzustellende Aufgabe.
-     * @param onStatusChange Ein Callback, der aufgerufen wird, wenn der Status der
-     *                       Aufgabe geändert wird (z. B. auf "erledigt").
+     * @param onStatusChange Eine Callback-Funktion, die bei Statusänderung der
+     *                       Aufgabe ausgeführt wird,
+     *                       z.&nbsp;B. um die Anzeige zu aktualisieren.
      */
     public TaskPanel(Task task, Runnable onStatusChange) {
         this.task = task;
@@ -31,6 +44,10 @@ public class TaskPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createLineBorder(Color.GRAY));
         setPreferredSize(new Dimension(300, 100));
+
+        if (task.completed) {
+            setBackground(Color.LIGHT_GRAY);
+        }
 
         // Titel
         titleLabel = new JLabel(task.title);
@@ -45,13 +62,13 @@ public class TaskPanel extends JPanel {
 
         // Erledigt-Checkbox
         completedCheckBox = new JCheckBox("Erledigt", task.completed);
-        completedCheckBox.setEnabled(!task.completed); // nur aktiv, wenn nicht bereits erledigt
+        completedCheckBox.setEnabled(!task.completed); // Nur aktiv, wenn nicht bereits erledigt
 
         completedCheckBox.addActionListener(e -> {
-            task.completed = true; // Aufgabe als erledigt markieren
-            InOut.updateTask(task); // Speicherung der Änderung
+            task.completed = true;
+            InOut.updateTask(task); // Dauerhafte Speicherung
             if (onStatusChange != null) {
-                onStatusChange.run(); // z. B. zum Neuladen der Anzeige
+                onStatusChange.run(); // Trigger für z.B. Listenaktualisierung
             }
         });
 
@@ -62,19 +79,20 @@ public class TaskPanel extends JPanel {
     }
 
     /**
-     * Fügt bei Bedarf zusätzliche Komponenten für abgeleitete Panels hinzu.
-     * Kann von Unterklassen wie {@code TaskTimedPanel} überschrieben werden.
+     * Fügt zusätzliche Informationen zum Panel hinzu.
+     * Diese Methode kann von Unterklassen überschrieben werden (z.&nbsp;B. um ein
+     * Fälligkeitsdatum anzuzeigen).
      *
-     * @param task Die Aufgabe, aus der Informationen extrahiert werden können.
+     * @param task Die anzuzeigende Aufgabe.
      */
     protected void AddExtraComponent(Task task) {
-        // Wird von Unterklassen überschrieben
+        // Standardmäßig keine zusätzlichen Komponenten
     }
 
     /**
      * Gibt die zugehörige Aufgabe dieses Panels zurück.
      *
-     * @return Die dargestellte {@code Task}.
+     * @return Die aktuell angezeigte {@link Task}.
      */
     public Task getTask() {
         return task;

@@ -3,72 +3,72 @@ import javax.swing.text.*;
 
 /**
  * {@code LimitedDocument} ist eine spezialisierte Implementierung von
- * {@link PlainDocument}, die eine maximale Zeichenanzahl sowie eine Liste
- * unerlaubter Zeichen für Benutzereingaben in einem {@link JTextField}
- * oder {@link JTextArea} durchsetzt.
- * 
+ * {@link PlainDocument}, die sowohl die maximale Zeichenanzahl als auch eine
+ * Liste unerlaubter Zeichen für Benutzereingaben in einem {@link JTextField}
+ * oder {@link JTextArea} beschränkt.
+ *
  * <p>
- * Diese Klasse verhindert die Eingabe bestimmter Zeichen (z. B. für Dateinamen
- * ungeeignete Zeichen wie {@code / \ : * ? " < > |}) und beschränkt zusätzlich
- * die Anzahl der Zeichen auf eine festgelegte Obergrenze.
+ * Diese Klasse verhindert die Eingabe bestimmter Zeichen – insbesondere
+ * solcher, die in Dateinamen ungültig sind (z.&nbsp;B.
+ * {@code / \ : * ? " < > |}) –
+ * und begrenzt gleichzeitig die Länge des eingegebenen Texts.
  * </p>
- * 
+ *
  * <p>
- * Sowohl Tastatureingaben als auch eingefügte Texte (z. B. via Copy & Paste)
- * werden automatisch gefiltert.
+ * Sowohl Tastatureingaben als auch Einfügungen über die Zwischenablage
+ * (Copy & Paste) werden automatisch geprüft und entsprechend gefiltert.
  * </p>
- * 
+ *
  * <p>
- * Beispielhafte Anwendung:
+ * <b>Beispiel:</b>
+ * </p>
  * 
  * <pre>{@code
  * JTextField field = new JTextField();
  * field.setDocument(new LimitedDocument(50));
  * }</pre>
- * </p>
- * 
+ *
  * @author Max
  */
 public class LimitedDocument extends PlainDocument {
-    /** Maximale erlaubte Zeichenanzahl im Dokument. */
+    /** Maximale Anzahl an Zeichen, die das Dokument aufnehmen darf. */
     private final int maxLength;
 
-    /** Liste der verbotenen Zeichen, die nicht eingefügt werden dürfen. */
+    /** Zeichen, die nicht erlaubt sind und herausgefiltert werden. */
     private final String forbiddenChars = "/\\:*?\"<>|";
 
     /**
-     * Erstellt ein {@code LimitedDocument} mit einer angegebenen maximalen
-     * Zeichenanzahl.
+     * Erstellt ein neues {@code LimitedDocument} mit der angegebenen
+     * maximalen Zeichenanzahl.
      *
-     * @param maxLength Die maximale Anzahl an Zeichen, die eingegeben werden
-     *                  dürfen.
+     * @param maxLength maximale Anzahl an Zeichen, die erlaubt ist
      */
     public LimitedDocument(int maxLength) {
         this.maxLength = maxLength;
     }
 
     /**
-     * Überschreibt {@link PlainDocument#insertString}, um unerlaubte Zeichen zu
-     * filtern und die Eingabe auf eine maximale Länge zu begrenzen.
+     * Fügt einen String ins Dokument ein – unter Beachtung der maximalen
+     * Länge und ohne unerlaubte Zeichen.
      *
-     * @param offset Die Einfügeposition.
-     * @param str    Der einzufügende Text.
-     * @param attr   Attributsatz für den Text (z. B. Formatierungen).
-     * @throws BadLocationException falls der Offset ungültig ist.
+     * @param offset Position, an der der Text eingefügt werden soll
+     * @param str    einzufügender Text
+     * @param attr   Attribute für den Text (z. B. Stilinformationen)
+     * @throws BadLocationException falls der Offset ungültig ist
      */
     @Override
     public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
         if (str == null)
             return;
 
-        // Verbotene Zeichen entfernen
+        // Entferne alle verbotenen Zeichen
         str = str.replaceAll("[" + Pattern.quote(forbiddenChars) + "]", "");
 
-        // Eingabe auf maximale Länge beschränken
+        // Wenn durch das Einfügen die maximale Länge überschritten wird, kürzen
         if (getLength() + str.length() > maxLength) {
             str = str.substring(0, maxLength - getLength());
         }
 
-        super.insertString(offset, str, attr); // Nur erlaubte Zeichen einfügen
+        super.insertString(offset, str, attr); // Einfügen des bereinigten Texts
     }
 }

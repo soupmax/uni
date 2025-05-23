@@ -1,40 +1,58 @@
+import java.awt.Color;
 import javax.swing.*;
 
 /**
  * {@code TaskTimedPanel} ist eine spezialisierte Variante von
  * {@link TaskPanel},
- * die zusätzlich das Fälligkeitsdatum einer zeitgebundenen
- * Aufgabe anzeigt.
+ * die das Fälligkeitsdatum einer zeitgebundenen Aufgabe visuell hervorhebt.
+ *
+ * <p>
+ * Die Hintergrundfarbe signalisiert den Status der Aufgabe:
+ * </p>
+ * <ul>
+ * <li><b>Orange</b>: Aufgabe ist heute fällig</li>
+ * <li><b>Rot</b>: Aufgabe ist überfällig</li>
+ * <li>Standardfarbe: Aufgabe ist erledigt oder liegt in der Zukunft</li>
+ * </ul>
  * 
  * @author Max
  */
 public class TaskTimedPanel extends TaskPanel {
+
     /** Label zur Anzeige des Fälligkeitsdatums. */
     private JLabel dueDateLabel;
 
     /**
-     * Erstellt ein neues {@code TaskTimedPanel} für eine zeitgebundene Aufgabe.
+     * Erstellt ein neues {@code TaskTimedPanel} zur Anzeige einer zeitgebundenen
+     * Aufgabe.
      *
-     * @param task           Das {@link TaskTimed}-Objekt, das angezeigt werden
+     * @param task           Das {@link TaskTimed}-Objekt, das dargestellt werden
      *                       soll.
-     * @param onStatusChange Eine Callback-Funktion, die beim Statuswechsel (z. B.
-     *                       als erledigt markieren) aufgerufen wird.
+     * @param onStatusChange Callback, der bei Statusänderung aufgerufen wird (z. B.
+     *                       erledigt).
      */
     public TaskTimedPanel(TaskTimed task, Runnable onStatusChange) {
-        super(task, onStatusChange); // ruft den Konstruktor von TaskPanel auf
+        super(task, onStatusChange);
+
+        // Fälligkeit optisch hervorheben, wenn Aufgabe nicht abgeschlossen ist
+        if (!task.completed) {
+            if (task.isDueToday()) {
+                setBackground(Color.ORANGE);
+            } else if (task.isOverDue()) {
+                setBackground(Color.RED);
+            }
+        }
     }
 
     /**
-     * Fügt zusätzliche Komponenten (Fälligkeitsdatum) dem Panel
-     * hinzu.
+     * Fügt ein Label mit dem Fälligkeitsdatum der Aufgabe hinzu.
      *
-     * @param task Die Aufgabe, von der die zusätzlichen Informationen angezeigt
-     *             werden sollen.
+     * @param task Die darzustellende Aufgabe.
      */
     @Override
     protected void AddExtraComponent(Task task) {
-        dueDateLabel = new JLabel("Fällig bis: " + ((TaskTimed) task).dueDate.toString());
-
+        TaskTimed timedTask = (TaskTimed) task;
+        dueDateLabel = new JLabel("Fällig bis: " + timedTask.getDueDate().toString());
         add(dueDateLabel);
     }
 }
