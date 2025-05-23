@@ -1,7 +1,38 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Die {@code App}-Klasse ist der Einstiegspunkt der Anwendung.
+ * Sie erstellt das Hauptfenster mit einem {@link JTabbedPane},
+ * in dem verschiedene Task-Kategorien als Tabs angezeigt werden.
+ * 
+ * <p>
+ * Zusätzlich gibt es einen "+"-Tab, der es dem Benutzer erlaubt,
+ * eine neue Kategorie (Tab) dynamisch hinzuzufügen.
+ * </p>
+ * 
+ * <p>
+ * Beim Hinzufügen eines neuen Tabs wird der Benutzer über einen
+ * {@link JOptionPane} zur Eingabe eines Tab-Namens aufgefordert.
+ * Bei Bestätigung wird ein neuer Tab mit dem entsprechenden Inhalt erstellt.
+ * </p>
+ * 
+ * <p>
+ * Das Hauptfenster wird beim Start maximiert.
+ * </p>
+ * 
+ * @author Max
+ */
 public class App {
+
+    /**
+     * Einstiegspunkt der Anwendung.
+     * Erstellt ein maximiertes JFrame mit einem {@link JTabbedPane},
+     * der Tabs für jede gespeicherte Kategorie sowie einen "+"-Tab zur Erstellung
+     * neuer Kategorien enthält.
+     *
+     * @param args Kommandozeilenargumente (werden nicht verwendet)
+     */
     public static void main(String[] args) {
         System.out.println("start");
 
@@ -38,7 +69,6 @@ public class App {
                     tabbedPane.addTab("+", new JPanel());
 
                     // Zum neuen Tab springen
-                    // tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 2);
                     previousIndex[0] = index;
                 } else {
                     // Falls abgebrochen: vorherigen Tab wieder auswählen
@@ -51,9 +81,6 @@ public class App {
         });
 
         frame.add(tabbedPane);
-
-        // frame.setSize(400, 200);add(tabbedPane);
-
         frame.setVisible(true);
 
         System.out.println("end");
