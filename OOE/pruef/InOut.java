@@ -54,13 +54,7 @@ public class InOut {
             allTasks[0] = task;
         }
         for (Task t : allTasks) {
-            if (t instanceof TaskTimed) {
-                taskArray.put(taskTimedToJSON((TaskTimed) t));
-            } else if (t instanceof TaskSimple) {
-                taskArray.put(taskSimpleToJSON((TaskSimple) t));
-            } else if (t instanceof Task) {
-                taskArray.put(taskToJSON(t));
-            }
+            taskArray.put(t.toJSON());
         }
 
         try (FileWriter file = new FileWriter(fileName)) {
@@ -80,13 +74,7 @@ public class InOut {
         JSONArray arr = new JSONArray();
 
         for (Task t : tasks) {
-            if (t instanceof TaskTimed) {
-                arr.put(taskTimedToJSON((TaskTimed) t));
-            } else if (t instanceof TaskSimple) {
-                arr.put(taskSimpleToJSON((TaskSimple) t));
-            } else {
-                arr.put(taskToJSON(t));
-            }
+            arr.put(t.toJSON());
         }
 
         try (FileWriter file = new FileWriter(fileName)) {
@@ -248,44 +236,4 @@ public class InOut {
         return new TaskSimple(category, title, description, completed);
     }
 
-    /**
-     * Wandelt eine Task in ein JSONObject um.
-     * 
-     * @param t Task-Objekt
-     * @return JSONObject mit Task-Daten
-     */
-    private static JSONObject taskToJSON(Task t) {
-        JSONObject json = new JSONObject();
-        json.put("category", t.category);
-        json.put("title", t.title);
-        json.put("description", t.description);
-        json.put("completed", t.completed);
-
-        return json;
-    }
-
-    /**
-     * Wandelt eine TaskTimed in ein JSONObject um.
-     * 
-     * @param t TaskTimed-Objekt
-     * @return JSONObject mit TaskTimed-Daten (inkl. dueDate)
-     */
-    private static JSONObject taskTimedToJSON(TaskTimed t) {
-        JSONObject json = taskToJSON(t);
-        json.put("dueDate", t.getDueDate().toString());
-
-        return json;
-    }
-
-    /**
-     * Wandelt eine TaskSimple in ein JSONObject um.
-     * 
-     * @param t TaskSimple-Objekt
-     * @return JSONObject mit TaskSimple-Daten
-     */
-    private static JSONObject taskSimpleToJSON(TaskSimple t) {
-        JSONObject json = taskToJSON(t);
-
-        return json;
-    }
 }

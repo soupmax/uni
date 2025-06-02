@@ -1,3 +1,5 @@
+import org.json.JSONObject;
+
 /**
  * Repräsentiert eine Aufgabe mit Titel, Beschreibung, Kategorie und
  * Status.
@@ -58,5 +60,21 @@ public class Task {
                 "title: " + title +
                 " description: " + description +
                 " completed: " + (completed ? "true" : "false");
+    }
+
+    /**
+     * Wandelt eine Task in ein JSONObject um.
+     * 
+     * @param t Task-Objekt
+     * @return JSONObject mit Task-Daten
+     */
+    protected JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("category", category);
+        json.put("title", title);
+        json.put("description", description);
+        json.put("completed", completed);
+
+        return json;
     }
 }

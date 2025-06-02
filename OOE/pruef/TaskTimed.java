@@ -1,5 +1,7 @@
 import java.time.*;
 
+import org.json.JSONObject;
+
 /**
  * {@code TaskTimed} erweitert die Klasse {@link Task} um ein Fälligkeitsdatum.
  * 
@@ -85,5 +87,19 @@ public class TaskTimed extends Task {
      */
     public boolean isOverDue() {
         return dueDate.isBefore(LocalDate.now());
+    }
+
+    @Override
+    /**
+     * Wandelt eine TaskTimed in ein JSONObject um.
+     * 
+     * @param t TaskTimed-Objekt
+     * @return JSONObject mit TaskTimed-Daten (inkl. dueDate)
+     */
+    public JSONObject toJSON() {
+        JSONObject json = super.toJSON();
+        json.put("dueDate", getDueDate().toString());
+
+        return json;
     }
 }

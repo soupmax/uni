@@ -1,3 +1,5 @@
+import org.json.JSONObject;
+
 /**
  * Erweiterung der Klasse Task ohne zusätzliche Attribute.
  * Repräsentiert eine einfache Aufgabe.
@@ -41,5 +43,18 @@ public class TaskSimple extends Task {
                 "title: " + title +
                 " description: " + description +
                 " completed: " + (completed ? "true" : "false");
+    }
+
+    @Override
+    /**
+     * Wandelt eine TaskSimple in ein JSONObject um.
+     * 
+     * @param t TaskSimple-Objekt
+     * @return JSONObject mit TaskSimple-Daten
+     */
+    public JSONObject toJSON() {
+        JSONObject json = super.toJSON();
+
+        return json;
     }
 }
