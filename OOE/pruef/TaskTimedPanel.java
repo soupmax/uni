@@ -37,9 +37,9 @@ public class TaskTimedPanel extends TaskPanel {
         // Fälligkeit optisch hervorheben, wenn Aufgabe nicht abgeschlossen ist
         if (!task.completed) {
             if (task.isDueToday()) {
-                setBackground(Color.ORANGE);
+                setBackground(new Color(255, 235, 205));
             } else if (task.isOverDue()) {
-                setBackground(Color.RED);
+                setBackground(new Color(255, 204, 203));
             }
         }
     }

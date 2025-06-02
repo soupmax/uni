@@ -44,6 +44,11 @@ public class TaskPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createLineBorder(Color.GRAY));
         setPreferredSize(new Dimension(300, 100));
+        setBackground(new Color(245, 245, 245));
+
+        setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
         if (task.completed) {
             setBackground(Color.LIGHT_GRAY);
@@ -58,11 +63,13 @@ public class TaskPanel extends JPanel {
         descriptionArea.setLineWrap(true);
         descriptionArea.setWrapStyleWord(true);
         descriptionArea.setEditable(false);
+        descriptionArea.setOpaque(false);
         descriptionArea.setBackground(getBackground());
 
         // Erledigt-Checkbox
         completedCheckBox = new JCheckBox("Erledigt", task.completed);
         completedCheckBox.setEnabled(!task.completed); // Nur aktiv, wenn nicht bereits erledigt
+        completedCheckBox.setOpaque(false);
 
         completedCheckBox.addActionListener(e -> {
             task.completed = true;

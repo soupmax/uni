@@ -33,6 +33,37 @@ public class App {
      * @param args Kommandozeilenargumente (werden nicht verwendet)
      */
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+            // Schriftart überall auf "Segoe UI", 13pt setzen (modern & gut lesbar)
+            UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 13));
+            UIManager.put("Button.font", new Font("Segoe UI", Font.PLAIN, 13));
+            UIManager.put("CheckBox.font", new Font("Segoe UI", Font.PLAIN, 13));
+            UIManager.put("TextArea.font", new Font("Segoe UI", Font.PLAIN, 13));
+            UIManager.put("TextField.font", new Font("Segoe UI", Font.PLAIN, 13));
+            UIManager.put("TitledBorder.font", new Font("Segoe UI", Font.BOLD, 13));
+
+            // Farben für Komponenten vereinheitlichen
+            Color background = new Color(245, 245, 245); // helles Grau
+            Color foreground = Color.DARK_GRAY;
+
+            UIManager.put("Panel.background", background);
+            UIManager.put("Label.foreground", foreground);
+            UIManager.put("TextArea.background", background);
+            UIManager.put("TextArea.foreground", foreground);
+            UIManager.put("ScrollPane.background", background);
+            UIManager.put("CheckBox.background", background);
+            UIManager.put("CheckBox.foreground", foreground);
+            UIManager.put("Button.background", new Color(230, 230, 230)); // leicht abgehoben
+            UIManager.put("Button.foreground", foreground);
+
+            // Optional: Button leicht "flacher" wirken lassen
+            UIManager.put("Button.focus", new Color(0, 0, 0, 0));
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                | UnsupportedLookAndFeelException e) {
+            e.printStackTrace(); // oder Logging / Fallback
+        }
         // Erstellen und Konfigurieren des Hauptfensters
         JFrame frame = new JFrame("Task Viewer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
