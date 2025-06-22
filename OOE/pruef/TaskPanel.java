@@ -17,7 +17,7 @@ import java.awt.*;
  * Bei Fließtext-Aufgaben wird der Textbereich bearbeitbar angezeigt.
  * </p>
  *
- * @author Max
+ * @author Fabian
  */
 public abstract class TaskPanel extends JPanel {
 

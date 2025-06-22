@@ -14,7 +14,7 @@
  * Zeitbezug benötigen.
  * </p>
  * 
- * @author Max
+ * @author Fabian
  */
 public class TaskSimplePanel extends TaskStructuredPanel {
 

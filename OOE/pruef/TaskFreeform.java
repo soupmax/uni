@@ -5,7 +5,7 @@
  * Diese Art von Aufgabe enthält nur Kategorie und Inhalt.
  * </p>
  * 
- * @author Max
+ * @author Fabian
  */
 public class TaskFreeform extends Task {
 

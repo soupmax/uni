@@ -12,7 +12,7 @@ import org.json.JSONObject;
  * Felder.
  * </p>
  * 
- * @author Max
+ * @author Fabian
  */
 public abstract class Task {
     /** Kategorie der Aufgabe. */

@@ -16,7 +16,7 @@ import org.json.JSONObject;
  * {@code dueDate} gespeichert.
  * </p>
  * 
- * @author Max
+ * @author Fabian
  */
 public class TaskTimed extends TaskStructured {
 

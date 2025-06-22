@@ -20,7 +20,7 @@ import java.awt.*;
  * um zusätzliche Informationen (z.&nbsp;B. Fälligkeitsdatum) darzustellen.
  * </p>
  * 
- * @author Max
+ * @author Fabian
  */
 public class TaskStructuredPanel extends TaskPanel {
 

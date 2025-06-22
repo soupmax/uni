@@ -20,7 +20,7 @@ import javax.swing.*;
  * Beschreibung angezeigt.
  * </p>
  *
- * @author Max
+ * @author Fabian
  */
 public class TaskTimedPanel extends TaskStructuredPanel {
 

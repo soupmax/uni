@@ -52,7 +52,6 @@ public class TaskInputDialog extends JDialog {
 
         titleField = new JTextField();
         titleField.setDocument(new LimitedDocument(50)); // Max. 50 Zeichen
-        titleField.setText(category);
 
         descriptionArea = new JTextArea(4, 20);
         descriptionArea.setDocument(new LimitedDocument(200)); // Max. 200 Zeichen

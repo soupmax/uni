@@ -16,7 +16,7 @@ import org.json.JSONObject;
  * explizitem Erledigt-Status.
  * </p>
  *
- * @author Max
+ * @author Fabian
  */
 public class TaskSimple extends TaskStructured {
 

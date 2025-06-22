@@ -12,7 +12,7 @@ import org.json.JSONObject;
  * und {@link TaskTimed} bereit.
  * </p>
  * 
- * @author Max
+ * @author Fabian
  */
 public abstract class TaskStructured extends Task {
 
