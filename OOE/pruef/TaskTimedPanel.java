@@ -17,7 +17,7 @@ import javax.swing.*;
  * 
  * @author Max
  */
-public class TaskTimedPanel extends TaskPanel {
+public class TaskTimedPanel extends TaskStructuredPanel {
 
     /** Label zur Anzeige des Fälligkeitsdatums. */
     private JLabel dueDateLabel;

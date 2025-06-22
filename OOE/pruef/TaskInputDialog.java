@@ -33,7 +33,7 @@ public class TaskInputDialog extends JDialog {
     private JTextField dueDateField;
 
     /** Das Ergebnisobjekt (Task), das vom Dialog erstellt wurde */
-    private Task resultTask;
+    private TaskStructured resultTask;
 
     /**
      * Erstellt einen neuen {@code TaskInputDialog}.
@@ -52,6 +52,7 @@ public class TaskInputDialog extends JDialog {
 
         titleField = new JTextField();
         titleField.setDocument(new LimitedDocument(50)); // Max. 50 Zeichen
+        titleField.setText(category);
 
         descriptionArea = new JTextArea(4, 20);
         descriptionArea.setDocument(new LimitedDocument(200)); // Max. 200 Zeichen
@@ -100,7 +101,6 @@ public class TaskInputDialog extends JDialog {
             } else {
                 resultTask = new TaskSimple(category, title, description);
             }
-
             dispose();
         });
 
@@ -121,7 +121,7 @@ public class TaskInputDialog extends JDialog {
      * @return ein {@link Task}-Objekt, wenn der Nutzer bestätigt;
      *         {@code null}, wenn der Dialog abgebrochen wurde
      */
-    public Task showDialog() {
+    public TaskStructured showDialog() {
         setVisible(true);
         return resultTask;
     }

@@ -12,21 +12,21 @@ import org.json.JSONObject;
  * 
  * @author Max
  */
-public class TaskTimed extends Task {
+public class TaskTimed extends TaskStructured {
     /** Das Fälligkeitsdatum der Aufgabe. */
     private LocalDate dueDate;
 
     /**
      * Konstruktor mit vollständigen Attributen.
      *
-     * @param category    Kategorie der Aufgabe.
-     * @param title       Titel der Aufgabe.
-     * @param description Beschreibung der Aufgabe.
-     * @param dueDate     Fälligkeitsdatum der Aufgabe.
-     * @param completed   Erledigt-Status der Aufgabe.
+     * @param category  Kategorie der Aufgabe.
+     * @param title     Titel der Aufgabe.
+     * @param content   Beschreibung der Aufgabe.
+     * @param dueDate   Fälligkeitsdatum der Aufgabe.
+     * @param completed Erledigt-Status der Aufgabe.
      */
-    public TaskTimed(String category, String title, String description, LocalDate dueDate, boolean completed) {
-        super(category, title, description, completed);
+    public TaskTimed(String category, String title, String content, LocalDate dueDate, boolean completed) {
+        super(category, title, content, completed);
         this.dueDate = dueDate;
     }
 
@@ -34,13 +34,13 @@ public class TaskTimed extends Task {
      * Konstruktor ohne Erledigt-Status (wird standardmäßig auf {@code false}
      * gesetzt).
      *
-     * @param category    Kategorie der Aufgabe.
-     * @param title       Titel der Aufgabe.
-     * @param description Beschreibung der Aufgabe.
-     * @param dueDate     Fälligkeitsdatum der Aufgabe.
+     * @param category Kategorie der Aufgabe.
+     * @param title    Titel der Aufgabe.
+     * @param content  Beschreibung der Aufgabe.
+     * @param dueDate  Fälligkeitsdatum der Aufgabe.
      */
-    public TaskTimed(String category, String title, String description, LocalDate dueDate) {
-        super(category, title, description);
+    public TaskTimed(String category, String title, String content, LocalDate dueDate) {
+        super(category, title, content);
         this.dueDate = dueDate;
     }
 
@@ -63,10 +63,10 @@ public class TaskTimed extends Task {
         return String.format(
                 "category: %s\n" +
                         "title: %s\n" +
-                        "description: %s\n" +
+                        "content: %s\n" +
                         "dueDate: %s\n" +
                         "completed: %s",
-                category, title, description, dueDate, completed ? "true" : "false");
+                category, title, content, dueDate, completed ? "true" : "false");
     }
 
     /**

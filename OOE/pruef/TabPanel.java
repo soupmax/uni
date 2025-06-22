@@ -15,21 +15,37 @@ public class TabPanel extends JPanel {
     /** Die Kategorie, zu der dieses Panel gehört. */
     private String category;
 
+    /** Ist das Panel für eine Fließtext Aufgabe?. */
+    public boolean isFreeform;
+
     /**
      * Erstellt ein neues {@code TabPanel} für eine bestimmte Kategorie.
      *
      * @param category Die Kategorie, deren Aufgaben angezeigt werden sollen.
      */
-    public TabPanel(String category) {
+    public TabPanel(String category, boolean isFreeform) {
         this.category = category;
+        this.isFreeform = isFreeform;
+
         setLayout(new BorderLayout());
+        if (isFreeform) {
+            Task[] tasks = InOut.loadCategoryTasks(category);
+            if (tasks.length > 0) {
+                TaskFreeform t = (TaskFreeform) tasks[0];
+                add(new TaskFreeformPanel(t));
+            } else {
+                TaskFreeform t = new TaskFreeform(category, "");
+                add(new TaskFreeformPanel(t));
+            }
+        } else {
+            grid = new GridView(category);
 
-        grid = new GridView(category);
+            // Initiale Ladung der Aufgaben
+            reload();
 
-        // Initiale Ladung der Aufgaben
-        reload();
+            add(grid, BorderLayout.CENTER);
 
-        add(grid, BorderLayout.CENTER);
+        }
     }
 
     /**

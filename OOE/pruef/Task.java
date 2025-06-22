@@ -6,47 +6,38 @@ import org.json.JSONObject;
  * 
  * @author Max
  */
-public class Task {
+public abstract class Task {
     /** Kategorie der Aufgabe */
     public String category;
+
+    /** Inhalt der Aufgabe */
+    public String content;
 
     /** Titel der Aufgabe */
     public String title;
 
-    /** Beschreibung der Aufgabe */
-    public String description;
-
-    /** Gibt an, ob die Aufgabe erledigt ist */
-    protected boolean completed;
-
     /**
-     * Erstellt eine neue Aufgabe mit vollständigen Attributen.
+     * Erstellt eine neue Aufgabe mit Titel (für Strukturierte Aufgaben)
      *
-     * @param category    Kategorie der Aufgabe
-     * @param title       Titel der Aufgabe
-     * @param description Beschreibung der Aufgabe
-     * @param completed   Erledigt-Status der Aufgabe
+     * @param content  Inhalt der Aufgabe
+     * @param category Kategorie der Aufgabe
      */
-    public Task(String category, String title, String description, boolean completed) {
-        this.title = title;
-        this.description = description;
-        this.completed = completed;
+    public Task(String category, String title, String content) {
+        this.content = content;
         this.category = category;
+        this.title = title;
     }
 
     /**
-     * Erstellt eine neue Aufgabe, die standardmäßig als nicht
-     * erledigt gilt.
+     * Erstellt eine neue Aufgabe ohne Titel (für Fließtext Aufgaben)
      *
-     * @param category    Kategorie der Aufgabe
-     * @param title       Titel der Aufgabe
-     * @param description Beschreibung der Aufgabe
+     * @param content  Inhalt der Aufgabe
+     * @param category Kategorie der Aufgabe
      */
-    public Task(String category, String title, String description) {
-        this.title = title;
-        this.description = description;
+    public Task(String category, String content) {
+        this.content = content;
         this.category = category;
-        this.completed = false;
+        this.title = "none";
     }
 
     /**
@@ -56,10 +47,7 @@ public class Task {
      *         Erledigt-Status
      */
     public String toString() {
-        return "category: " + category + "\n" +
-                "title: " + title +
-                " description: " + description +
-                " completed: " + (completed ? "true" : "false");
+        return content;
     }
 
     /**
@@ -71,9 +59,8 @@ public class Task {
     protected JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("category", category);
+        json.put("content", content);
         json.put("title", title);
-        json.put("description", description);
-        json.put("completed", completed);
 
         return json;
     }

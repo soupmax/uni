@@ -21,19 +21,23 @@ import java.awt.*;
  * 
  * @author Max
  */
-public abstract class TaskPanel extends JPanel {
+public class TaskStructuredPanel extends TaskPanel {
 
-    private JLabel titleLabel;
-    protected JTextArea contentArea;
-    protected Task task;
+    private JCheckBox completedCheckBox;
+    private TaskStructured task;
+    private Runnable onStatusChange; // Wird absichtlich nicht entfernt, dient als Trigger für UI-Aktualisierung
 
     /**
      * Erstellt ein neues Panel zur Anzeige einer Aufgabe.
      *
-     * @param task Die darzustellende Aufgabe.
+     * @param task           Die darzustellende Aufgabe.
+     * @param onStatusChange Eine Callback-Funktion, die bei Statusänderung der
+     *                       Aufgabe ausgeführt wird,
+     *                       z.&nbsp;B. um die Anzeige zu aktualisieren.
      */
-    public TaskPanel(Task task) {
-        this.task = task;
+    public TaskStructuredPanel(TaskStructured task, Runnable onStatusChange) {
+        super(task);
+        this.onStatusChange = onStatusChange;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -44,29 +48,29 @@ public abstract class TaskPanel extends JPanel {
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
-        // Titel (nur angezeigt, wenn es keine fließtext aufgabe ist)
-        if (!task.title.equals("none")) {
-            titleLabel = new JLabel(task.title);
-            titleLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        if (task.completed) {
+            setBackground(Color.LIGHT_GRAY);
         }
+
+        // Titel
 
         // Beschreibung
 
-        boolean freeform = "none".equals(task.title);
+        // Erledigt-Checkbox
+        completedCheckBox = new JCheckBox("Erledigt", task.completed);
+        completedCheckBox.setEnabled(!task.completed); // Nur aktiv, wenn nicht bereits erledigt
+        completedCheckBox.setOpaque(false);
 
-        contentArea = new JTextArea(task.content);
-        contentArea.setLineWrap(true);
-        contentArea.setWrapStyleWord(true);
-        contentArea.setEditable(freeform);
-        contentArea.setOpaque(freeform);
-        contentArea.setBackground(getBackground());
-
-        if (!task.title.equals("none")) {
-            add(titleLabel);
-        }
-        add(new JScrollPane(contentArea));
+        completedCheckBox.addActionListener(e -> {
+            task.completed = true;
+            InOut.updateTask(task); // Dauerhafte Speicherung
+            if (onStatusChange != null) {
+                onStatusChange.run(); // Trigger für z.B. Listenaktualisierung
+            }
+        });
 
         AddExtraComponent(task);
+        add(completedCheckBox);
     }
 
     /**

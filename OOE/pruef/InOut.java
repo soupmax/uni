@@ -195,24 +195,56 @@ public class InOut {
      * @param updatedTask Task mit den neuen Werten
      */
     public static void updateTask(Task updatedTask) {
+        System.out.println("→ updateTask() wurde betreten");
         Task[] tasks = loadAllTasks();
 
-        if (tasks == null)
-            return;
-
         List<Task> updatedList = new ArrayList<>();
+        boolean taskExists = false;
 
-        for (Task t : tasks) {
-            if (t.title.equals(updatedTask.title) &&
-                    t.category.equals(updatedTask.category) &&
-                    t.description.equals(updatedTask.description)) {
-                updatedList.add(updatedTask); // ersetze alte durch neue Task
-            } else {
-                updatedList.add(t); // sonst unverändert übernehmen
+        if (tasks != null) {
+            for (Task t : tasks) {
+                if (isSameTask(t, updatedTask)) {
+                    taskExists = true;
+                    updatedList.add(updatedTask);
+                } else {
+                    updatedList.add(t);
+                }
             }
         }
 
+        if (!taskExists) {
+            updatedList.add(updatedTask); // neu hinzufügen
+        }
+        System.out.println("UpdateTask aufgerufen für: " + updatedTask.category + " / " + updatedTask.title);
+        System.out.println("Gespeicherte Tasks:");
+        for (Task t : tasks) {
+            System.out.println("→ " + t.category + " / " + t.title + " (" + t.getClass().getSimpleName() + ")");
+        }
+
         saveAllTasks(updatedList.toArray(new Task[0]));
+
+    }
+
+    /**
+     * Prüft, ob eine Kategorie Fließtext aufgaben enthält
+     * 
+     * @param category Name der Kategorie
+     * @return
+     */
+    public static boolean isFreeformCategory(String category) {
+        Task[] tasks = loadCategoryTasks(category);
+        for (Task t : tasks) {
+            if (t.title == "none") {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isSameTask(Task a, Task b) {
+        return a.getClass().equals(b.getClass()) &&
+                a.title.trim().equalsIgnoreCase(b.title.trim()) &&
+                a.category.trim().equalsIgnoreCase(b.category.trim());
     }
 
     /**
@@ -225,15 +257,23 @@ public class InOut {
     private static Task JSONToTask(JSONObject json) {
         String category = json.getString("category");
         String title = json.getString("title");
-        String description = json.getString("description");
+        String content = json.getString("content");
+
+        // fließtext aufgaben haben keine completet eigenschaft, weshalb diese eher
+        // abgefertigt werden
+        if (title.equals("none")) {
+            // title ist hier nicht wichtig, da er immer none ist
+            return new TaskFreeform(category, content);
+        }
+
         boolean completed = json.getBoolean("completed");
 
         if (json.has("dueDate")) {
             // es ist eine TaskTimed
             LocalDate dueDate = LocalDate.parse(json.getString("dueDate"));
-            return new TaskTimed(category, title, description, dueDate, completed);
+            return new TaskTimed(category, title, content, dueDate, completed);
         }
-        return new TaskSimple(category, title, description, completed);
+        return new TaskSimple(category, title, content, completed);
     }
 
 }

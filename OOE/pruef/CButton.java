@@ -78,7 +78,7 @@ public class CButton extends JPanel {
         TabPanel tab = (TabPanel) SwingUtilities.getAncestorOfClass(TabPanel.class, this);
         TaskInputDialog dialog = new TaskInputDialog(owner, tab.getCategory());
 
-        Task newTask = dialog.showDialog();
+        TaskStructured newTask = dialog.showDialog();
 
         if (newTask != null) {
             InOut.saveTask(newTask);

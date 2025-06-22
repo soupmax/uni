@@ -86,7 +86,7 @@ public class GridView extends JPanel {
      * @param task Die Aufgabe, für die ein Panel erzeugt werden soll.
      * @return Das passende JPanel zur Darstellung der Aufgabe.
      */
-    private JPanel createPanelForTask(Task task) {
+    private JPanel createPanelForTask(TaskStructured task) {
         Runnable refresh = () -> putNewTasks(InOut.loadCategoryTasks(category));
 
         if (task instanceof TaskTimed)
@@ -94,12 +94,14 @@ public class GridView extends JPanel {
         else if (task instanceof TaskSimple)
             return new TaskSimplePanel((TaskSimple) task, refresh);
         else
-            return new TaskPanel(task, refresh);
+            throw new IllegalArgumentException("unbekannter aufgabentyp");
+
     }
 
     /**
      * Fügt eine Liste von Aufgaben in die entsprechenden Kategorien-Panels ein.
-     * Bereits vorhandene Inhalte werden vorher entfernt.
+     * Bereits vorhandene Inhalte werden vorher entfernt. Fließtext Aufgaben werden
+     * ignoriert, falls sie hier auftauchen.
      *
      * @param tasks Array von Aufgaben, die dargestellt werden sollen.
      */
@@ -111,10 +113,12 @@ public class GridView extends JPanel {
 
         if (tasks != null) {
             for (Task task : tasks) {
-                if (task == null)
+                // wir wollen hier keine fließtext Aufgaben
+                if (task == null || task instanceof TaskFreeform)
                     continue;
 
-                JPanel panel = createPanelForTask(task);
+                TaskStructured taskStruct = (TaskStructured) task;
+                JPanel panel = createPanelForTask(taskStruct);
 
                 // Styling der Task-Panels
                 panel.setMaximumSize(new Dimension(600, 150)); // maximale Breite
@@ -122,9 +126,9 @@ public class GridView extends JPanel {
                 panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
                 // Zuordnung zur Kategorie
-                if (task.completed) {
+                if (taskStruct.completed) {
                     doneContent.add(panel);
-                } else if (task instanceof TaskTimed) {
+                } else if (taskStruct instanceof TaskTimed) {
                     timedContent.add(panel);
                 } else {
                     openContent.add(panel);

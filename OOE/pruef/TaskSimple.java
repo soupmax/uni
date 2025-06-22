@@ -6,29 +6,29 @@ import org.json.JSONObject;
  * 
  * @author Max
  */
-public class TaskSimple extends Task {
+public class TaskSimple extends TaskStructured {
 
     /**
      * Konstruktor mit vollständigen Attributen.
      *
-     * @param category    Kategorie der Aufgabe
-     * @param title       Titel der Aufgabe
-     * @param description Beschreibung der Aufgabe
-     * @param completed   Erledigt-Status der Aufgabe
+     * @param category  Kategorie der Aufgabe
+     * @param title     Titel der Aufgabe
+     * @param content   Beschreibung der Aufgabe
+     * @param completed Erledigt-Status der Aufgabe
      */
-    public TaskSimple(String category, String title, String description, boolean completed) {
-        super(category, title, description, completed);
+    public TaskSimple(String category, String title, String content, boolean completed) {
+        super(category, title, content, completed);
     }
 
     /**
      * Konstruktor ohne Erledigt-Status (standardmäßig false).
      *
-     * @param category    Kategorie der Aufgabe
-     * @param title       Titel der Aufgabe
-     * @param description Beschreibung der Aufgabe
+     * @param category Kategorie der Aufgabe
+     * @param title    Titel der Aufgabe
+     * @param content  Beschreibung der Aufgabe
      */
-    public TaskSimple(String category, String title, String description) {
-        super(category, title, description);
+    public TaskSimple(String category, String title, String content) {
+        super(category, title, content);
     }
 
     /**
@@ -41,7 +41,7 @@ public class TaskSimple extends Task {
     public String toString() {
         return "category: " + category + "\n" +
                 "title: " + title +
-                " description: " + description +
+                " content: " + content +
                 " completed: " + (completed ? "true" : "false");
     }
 

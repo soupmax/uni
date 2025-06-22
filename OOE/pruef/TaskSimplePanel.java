@@ -8,7 +8,7 @@
  * 
  * @author Max
  */
-public class TaskSimplePanel extends TaskPanel {
+public class TaskSimplePanel extends TaskStructuredPanel {
 
     /**
      * Erzeugt ein neues {@code TaskSimplePanel} für die gegebene einfache Aufgabe.
@@ -18,6 +18,6 @@ public class TaskSimplePanel extends TaskPanel {
      *                       wird (z.B. Refresh).
      */
     public TaskSimplePanel(TaskSimple task, Runnable onStatusChange) {
-        super((Task) task, onStatusChange);
+        super((TaskStructured) task, onStatusChange);
     }
 }

@@ -76,11 +76,37 @@ public class App {
         // Laden vorhandener Kategorien (Tabs)
         String[] categories = InOut.getAllTabs();
         for (String category : categories) {
-            tabbedPane.addTab(category, new TabPanel(category));
+            if (InOut.isFreeformCategory(category)) {
+                tabbedPane.addTab(category, new TabPanel(category, true));
+            } else {
+                tabbedPane.addTab(category, new TabPanel(category, false));
+            }
         }
 
         // "+" Tab hinzufügen für das Erstellen neuer Kategorien
         tabbedPane.addTab("+", new JPanel());
+
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                // fließtext aufgaben speichern/aktualisieren
+                for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+                    Component comp = tabbedPane.getComponentAt(i);
+                    if (comp instanceof TabPanel panel && panel.isFreeform) {
+                        for (Component c : panel.getComponents()) {
+                            if (c instanceof TaskFreeformPanel tfp) {
+                                System.out.println("→ Ich rufe updateTask() jetzt auf");
+                                InOut.updateTask(tfp.getTask());
+                                break; // bricht aus dieser Tab-Verarbeitung aus – genügt, da nur eine Freeform
+                                       // erwartet
+                            }
+                        }
+                    }
+                }
+
+                System.exit(0); // Anwendung beenden
+            }
+        });
 
         /**
          * Speichert den Index des zuletzt gewählten Tabs.
@@ -101,14 +127,15 @@ public class App {
         if (tabbedPane.getTabCount() == 1) {
             ignoreEvent[0] = true; // Listener blockieren
             SwingUtilities.invokeLater(() -> {
-                String newCategory = JOptionPane.showInputDialog(
-                        frame, "Neue Kategorie eingeben:", "Neuer Tab", JOptionPane.PLAIN_MESSAGE);
-                if (newCategory != null && !newCategory.trim().isEmpty()) {
-                    tabbedPane.removeTabAt(0);
-                    tabbedPane.addTab(newCategory, new TabPanel(newCategory));
+                NewTabPanelDialog.NewTabData data = NewTabPanelDialog.showDialog(frame);
+                if (data != null) {
+                    tabbedPane.removeTabAt(tabbedPane.getTabCount() - 1);
+                    tabbedPane.addTab(data.category, new TabPanel(data.category, data.isPlainText));
                     tabbedPane.addTab("+", new JPanel());
-                    tabbedPane.setSelectedIndex(0);
-                    previousIndex[0] = 0;
+
+                    int newIndex = tabbedPane.getTabCount() - 2;
+                    tabbedPane.setSelectedIndex(newIndex);
+                    previousIndex[0] = newIndex;
                 }
                 ignoreEvent[0] = false; // Listener wieder aktivieren
             });
@@ -129,19 +156,16 @@ public class App {
             // "+"-Tab wurde ausgewählt
             if (index == tabbedPane.getTabCount() - 1 && tabbedPane.getTabCount() > 0) {
                 ignoreEvent[0] = true;
-                String newCategory = JOptionPane.showInputDialog(
-                        null, "Neue Kategorie eingeben:", "Neuer Tab", JOptionPane.PLAIN_MESSAGE);
-
-                if (newCategory != null && !newCategory.trim().isEmpty()) {
-                    // "+"-Tab entfernen, neuen hinzufügen und "+" erneut anhängen
+                NewTabPanelDialog.NewTabData data = NewTabPanelDialog.showDialog(frame);
+                if (data != null) {
                     tabbedPane.removeTabAt(tabbedPane.getTabCount() - 1);
-                    tabbedPane.addTab(newCategory, new TabPanel(newCategory));
+                    tabbedPane.addTab(data.category, new TabPanel(data.category, data.isPlainText));
                     tabbedPane.addTab("+", new JPanel());
 
-                    // Neu erstellten Tab aktivieren
                     int newIndex = tabbedPane.getTabCount() - 2;
                     tabbedPane.setSelectedIndex(newIndex);
                     previousIndex[0] = newIndex;
+
                 } else {
                     // Bei Abbruch zum vorherigen Tab zurückspringen
                     if (previousIndex[0] >= 0 && previousIndex[0] < tabbedPane.getTabCount()) {
@@ -159,4 +183,5 @@ public class App {
         frame.add(tabbedPane);
         frame.setVisible(true);
     }
+
 }
