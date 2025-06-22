@@ -16,27 +16,35 @@ import org.json.JSONArray;
 /**
  * Utility-Klasse zur Verwaltung von Tasks mit JSON-basierter
  * Speicherung und Laden aus einer Datei (./tasks.json).
- * Unterstützt unterschiedliche Task-Typen (TaskSimple, TaskTimed).
- * 
- * Funktionen:
- * - Speichern einzelner oder aller Tasks in JSON-Datei
- * - Laden aller Tasks oder kategoriebasierter Tasks
- * - Löschen von Tasks nach Kategorie
- * - Aktualisieren vorhandener Tasks
- * - Ermitteln aller existierenden Kategorien (Tabs)
- * 
- * Die Klasse verwendet die org.json Bibliothek zur JSON-Verarbeitung.
- * 
+ *
+ * <p>
+ * Unterstützt unterschiedliche Task-Typen ({@link TaskSimple},
+ * {@link TaskTimed}, {@link TaskFreeform}).
+ * Die Daten werden als JSON gespeichert und gelesen, wobei die
+ * org.json-Bibliothek verwendet wird.
+ * </p>
+ *
+ * <p>
+ * Funktionen dieser Klasse:
+ * </p>
+ * <ul>
+ * <li>Speichern einzelner oder aller Tasks</li>
+ * <li>Laden aller oder kategoriebasierter Tasks</li>
+ * <li>Aktualisieren vorhandener Tasks</li>
+ * <li>Löschen aller Tasks einer Kategorie</li>
+ * <li>Ermitteln aller Kategorienamen</li>
+ * </ul>
+ *
  * @author Max
  */
 public class InOut {
     private static String fileName = "./tasks.json";
 
     /**
-     * Speichert eine einzelne Task. Lädt vorhandene Tasks aus der Datei,
-     * fügt die neue Task hinzu und speichert das aktualisierte Array.
-     * 
-     * @param task Die zu speichernde Task (TaskSimple oder TaskTimed)
+     * Speichert eine einzelne Task. Bestehende Tasks werden geladen,
+     * die neue Task hinzugefügt und anschließend das gesamte Array gespeichert.
+     *
+     * @param task Die zu speichernde Task (TaskSimple, TaskTimed oder TaskFreeform)
      */
     public static void saveTask(Task task) {
         JSONArray taskArray = new JSONArray();
@@ -65,10 +73,9 @@ public class InOut {
     }
 
     /**
-     * Speichert ein Array von Tasks komplett in der JSON-Datei.
-     * Überschreibt den bisherigen Inhalt.
-     * 
-     * @param tasks Array von Tasks zum Speichern
+     * Überschreibt alle gespeicherten Tasks mit dem gegebenen Array.
+     *
+     * @param tasks Array von Tasks, das vollständig gespeichert werden soll
      */
     public static void saveAllTasks(Task[] tasks) {
         JSONArray arr = new JSONArray();
@@ -85,10 +92,10 @@ public class InOut {
     }
 
     /**
-     * Lädt alle Tasks aus der JSON-Datei.
-     * 
-     * @return Ein Array aller gespeicherten Tasks, oder null falls Datei leer/nicht
-     *         vorhanden,
+     * Lädt alle Tasks aus der Datei {@code ./tasks.json}.
+     *
+     * @return Ein sortiertes Array aller gespeicherten Tasks,
+     *         oder {@code null}, wenn Datei leer oder nicht vorhanden,
      *         oder ein leeres Array bei Fehlern
      */
     public static Task[] loadAllTasks() {
@@ -113,10 +120,9 @@ public class InOut {
     }
 
     /**
-     * Ermittelt alle unterschiedlichen Kategorien (Tabs) aus den gespeicherten
-     * Tasks.
-     * 
-     * @return Array der Kategorienamen, ggf. leer
+     * Gibt ein Array aller in der Datei gespeicherten Kategoriennamen zurück.
+     *
+     * @return Array mit eindeutigen Kategorienamen
      */
     public static String[] getAllTabs() {
         Task[] tasks = loadAllTasks();
@@ -129,11 +135,11 @@ public class InOut {
     }
 
     /**
-     * Lädt alle Tasks einer bestimmten Kategorie aus der JSON-Datei.
-     * 
-     * @param cat Kategorie-Name
-     * @return Array von Tasks der angegebenen Kategorie, oder null falls Datei
-     *         leer/nicht vorhanden,
+     * Lädt alle Tasks einer bestimmten Kategorie.
+     *
+     * @param cat Kategorie, nach der gefiltert werden soll
+     * @return Array der Tasks dieser Kategorie,
+     *         {@code null} wenn Datei leer/nicht vorhanden,
      *         oder ein leeres Array bei Fehlern
      */
     public static Task[] loadCategoryTasks(String cat) {
@@ -145,14 +151,12 @@ public class InOut {
             String content = new String(Files.readAllBytes(Paths.get(fileName)));
             JSONArray taskArray = new JSONArray(content);
 
-            // Da einige Indizes übersprungen werden, besser Liste benutzen
             List<Task> tasksList = new ArrayList<>();
 
             for (int i = 0; i < taskArray.length(); i++) {
                 JSONObject json = taskArray.getJSONObject(i);
                 String category = json.getString("category");
 
-                // skip tasks in anderen kategorien (werden in anderen panels angezeigt)
                 if (!category.equals(cat)) {
                     continue;
                 }
@@ -161,17 +165,16 @@ public class InOut {
             }
 
             return Utils.sortTasks(tasksList.toArray(new Task[0]));
-            // return tasksList.toArray(new Task[0]);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
-            return new Task[0]; // Rückgabe eines leeren Arrays im Fehlerfall
+            return new Task[0];
         }
     }
 
     /**
-     * Löscht alle Tasks einer bestimmten Kategorie.
-     * 
-     * @param category Kategorie, deren Tasks gelöscht werden sollen
+     * Löscht alle Tasks einer bestimmten Kategorie und speichert das Ergebnis.
+     *
+     * @param category Name der zu löschenden Kategorie
      */
     public static void deleteCategoryTasks(String category) {
         Task[] tasks = loadAllTasks();
@@ -179,7 +182,6 @@ public class InOut {
         if (tasks == null)
             return;
 
-        // Alle Tasks außer der zu löschenden Kategorie behalten
         List<Task> filteredTasks = Arrays.stream(tasks)
                 .filter(t -> !t.category.equals(category))
                 .toList();
@@ -188,14 +190,12 @@ public class InOut {
     }
 
     /**
-     * Aktualisiert eine bestehende Task durch Ersetzen anhand von Titel, Kategorie
-     * und Beschreibung.
-     * Speichert danach alle Tasks neu.
-     * 
-     * @param updatedTask Task mit den neuen Werten
+     * Aktualisiert eine bestehende Task, falls sie existiert.
+     * Andernfalls wird sie neu hinzugefügt.
+     *
+     * @param updatedTask Die zu aktualisierende oder hinzuzufügende Task
      */
     public static void updateTask(Task updatedTask) {
-        System.out.println("→ updateTask() wurde betreten");
         Task[] tasks = loadAllTasks();
 
         List<Task> updatedList = new ArrayList<>();
@@ -213,18 +213,18 @@ public class InOut {
         }
 
         if (!taskExists) {
-            updatedList.add(updatedTask); // neu hinzufügen
+            updatedList.add(updatedTask);
         }
 
         saveAllTasks(updatedList.toArray(new Task[0]));
-
     }
 
     /**
-     * Prüft, ob eine Kategorie Fließtext aufgaben enthält
-     * 
+     * Prüft, ob eine bestimmte Kategorie mindestens eine Fließtext-Aufgabe enthält.
+     *
      * @param category Name der Kategorie
-     * @return
+     * @return {@code true}, wenn eine {@link TaskFreeform} vorhanden ist, sonst
+     *         {@code false}
      */
     public static boolean isFreeformCategory(String category) {
         Task[] tasks = loadCategoryTasks(category);
@@ -236,6 +236,14 @@ public class InOut {
         return false;
     }
 
+    /**
+     * Interne Hilfsmethode zum Vergleichen zweier Tasks.
+     *
+     * @param a Erste Task
+     * @param b Zweite Task
+     * @return {@code true}, wenn beide Tasks denselben Typ, Titel und dieselbe
+     *         Kategorie haben
+     */
     private static boolean isSameTask(Task a, Task b) {
         return a.getClass().equals(b.getClass()) &&
                 a.title.trim().equalsIgnoreCase(b.title.trim()) &&
@@ -243,32 +251,27 @@ public class InOut {
     }
 
     /**
-     * Wandelt ein JSONObject in eine entsprechende Task-Instanz (TaskSimple oder
-     * TaskTimed) um.
-     * 
-     * @param json JSON-Daten der Task
-     * @return Task-Objekt
+     * Wandelt ein {@link JSONObject} in eine konkrete Task-Instanz um.
+     * Unterstützt {@link TaskSimple}, {@link TaskTimed} und {@link TaskFreeform}.
+     *
+     * @param json Die JSON-Repräsentation einer Task
+     * @return Die erzeugte Task-Instanz
      */
     private static Task JSONToTask(JSONObject json) {
         String category = json.getString("category");
         String title = json.getString("title");
         String content = json.getString("content");
 
-        // fließtext aufgaben haben keine completet eigenschaft, weshalb diese eher
-        // abgefertigt werden
         if (title.equals("none")) {
-            // title ist hier nicht wichtig, da er immer none ist
             return new TaskFreeform(category, content);
         }
 
         boolean completed = json.getBoolean("completed");
 
         if (json.has("dueDate")) {
-            // es ist eine TaskTimed
             LocalDate dueDate = LocalDate.parse(json.getString("dueDate"));
             return new TaskTimed(category, title, content, dueDate, completed);
         }
         return new TaskSimple(category, title, content, completed);
     }
-
 }

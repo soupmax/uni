@@ -4,7 +4,7 @@ import java.awt.*;
 /**
  * {@code TaskPanel} ist ein generisches Panel zur Darstellung einer
  * {@link Task}.
- * 
+ *
  * <p>
  * Es zeigt den Titel, die Beschreibung und den Status (erledigt/nicht erledigt)
  * einer Aufgabe an.
@@ -12,19 +12,22 @@ import java.awt.*;
  * überschrieben werden,
  * um zusätzliche Informationen (z.&nbsp;B. Fälligkeitsdatum) anzuzeigen.
  * </p>
- * 
+ *
  * <p>
- * Wenn eine Aufgabe als erledigt markiert wird, wird die zugehörige
- * Callback-Funktion ausgeführt
- * und die Änderung dauerhaft gespeichert.
+ * Bei Fließtext-Aufgaben wird der Textbereich bearbeitbar angezeigt.
  * </p>
- * 
+ *
  * @author Max
  */
 public abstract class TaskPanel extends JPanel {
 
+    /** Titel der Aufgabe (nur bei strukturierten Aufgaben sichtbar) */
     private JLabel titleLabel;
+
+    /** Beschreibung oder Fließtext der Aufgabe */
     protected JTextArea contentArea;
+
+    /** Die dargestellte Aufgabe */
     protected Task task;
 
     /**
@@ -44,35 +47,36 @@ public abstract class TaskPanel extends JPanel {
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
-        // Titel (nur angezeigt, wenn es keine fließtext aufgabe ist)
+        // Titel nur anzeigen, wenn es sich nicht um eine Fließtext-Aufgabe handelt
         if (!task.title.equals("none")) {
             titleLabel = new JLabel(task.title);
             titleLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
         }
 
-        // Beschreibung
-
+        // Beschreibung / Textbereich
         boolean freeform = "none".equals(task.title);
 
         contentArea = new JTextArea(task.content);
         contentArea.setLineWrap(true);
         contentArea.setWrapStyleWord(true);
-        contentArea.setEditable(freeform);
+        contentArea.setEditable(freeform); // Nur Fließtext-Aufgaben sind editierbar
         contentArea.setOpaque(freeform);
         contentArea.setBackground(getBackground());
 
-        if (!task.title.equals("none")) {
+        if (!freeform) {
             add(titleLabel);
         }
+
         add(new JScrollPane(contentArea));
 
+        // Möglichkeit für Unterklassen, weitere UI-Elemente hinzuzufügen
         AddExtraComponent(task);
     }
 
     /**
      * Fügt zusätzliche Informationen zum Panel hinzu.
      * Diese Methode kann von Unterklassen überschrieben werden (z.&nbsp;B. um ein
-     * Fälligkeitsdatum anzuzeigen).
+     * Fälligkeitsdatum oder Checkbox anzuzeigen).
      *
      * @param task Die anzuzeigende Aufgabe.
      */

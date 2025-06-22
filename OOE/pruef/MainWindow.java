@@ -20,7 +20,7 @@ public class MainWindow extends JFrame {
 
     /**
      * Konstruktor zur Initialisierung des Fensters und Hinzufügen des
-     * CustomButtons.
+     * {@link CustomButton}.
      */
     public MainWindow() {
         setTitle("Test Fenster");
@@ -55,6 +55,11 @@ public class MainWindow extends JFrame {
  * 
  * <p>
  * Die Größe und das Layout des Buttons sind vordefiniert.
+ * </p>
+ * 
+ * <p>
+ * Diese Klasse ist als einfache GUI-Komponente gedacht und kann flexibel
+ * eingebunden werden.
  * </p>
  * 
  * @author Max

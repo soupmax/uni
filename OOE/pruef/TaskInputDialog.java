@@ -74,7 +74,11 @@ public class TaskInputDialog extends JDialog {
         JButton okButton = new JButton("Erstellen");
         JButton cancelButton = new JButton("Abbrechen");
 
-        // OK-Button: Eingaben validieren und Aufgabe erstellen
+        /**
+         * OK-Button: Validiert Benutzereingaben und erzeugt eine passende Task.
+         * Wenn ein gültiges Fälligkeitsdatum eingegeben wird, wird eine TaskTimed
+         * erstellt; andernfalls eine TaskSimple.
+         */
         okButton.addActionListener(e -> {
             String title = titleField.getText().trim();
             String description = descriptionArea.getText().trim();
@@ -104,7 +108,9 @@ public class TaskInputDialog extends JDialog {
             dispose();
         });
 
-        // Abbrechen-Button: Dialog schließen ohne Aufgabe zu erstellen
+        /**
+         * Cancel-Button: Bricht den Dialog ab und gibt null als Ergebnis zurück.
+         */
         cancelButton.addActionListener(e -> {
             resultTask = null;
             dispose();

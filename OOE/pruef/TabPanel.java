@@ -4,24 +4,31 @@ import java.awt.*;
 /**
  * Das {@code TabPanel} stellt ein Panel dar, das eine bestimmte Task-Kategorie
  * in einem Tab anzeigt.
- * Es enthält eine {@link GridView}, die alle Tasks dieser Kategorie darstellt.
+ * 
+ * <p>
+ * Abhängig vom Typ der Kategorie kann es entweder eine {@link GridView} für
+ * strukturierte Aufgaben (z.&nbsp;B. mit Fälligkeitsdatum)
+ * oder ein einzelnes {@link TaskFreeformPanel} für Fließtext-Aufgaben
+ * enthalten.
+ * </p>
  * 
  * @author Max
  */
 public class TabPanel extends JPanel {
-    /** Die GridView zur Anzeige von Aufgaben. */
+    /** Die GridView zur Anzeige strukturierter Aufgaben. */
     private GridView grid;
 
     /** Die Kategorie, zu der dieses Panel gehört. */
     private String category;
 
-    /** Ist das Panel für eine Fließtext Aufgabe?. */
+    /** Gibt an, ob dieses Panel Fließtext-Aufgaben enthält. */
     public boolean isFreeform;
 
     /**
      * Erstellt ein neues {@code TabPanel} für eine bestimmte Kategorie.
      *
-     * @param category Die Kategorie, deren Aufgaben angezeigt werden sollen.
+     * @param category   Die Kategorie, deren Aufgaben angezeigt werden sollen.
+     * @param isFreeform {@code true}, wenn die Kategorie Fließtext-Aufgaben enthält
      */
     public TabPanel(String category, boolean isFreeform) {
         this.category = category;
@@ -40,16 +47,16 @@ public class TabPanel extends JPanel {
         } else {
             grid = new GridView(category);
 
-            // Initiale Ladung der Aufgaben
+            // Initiales Laden der Aufgaben
             reload();
 
             add(grid, BorderLayout.CENTER);
-
         }
     }
 
     /**
-     * Lädt die Aufgaben der aktuellen Kategorie neu und aktualisiert die Anzeige.
+     * Lädt die Aufgaben der aktuellen Kategorie neu und aktualisiert die Anzeige
+     * in der GridView.
      */
     public void reload() {
         Task[] loadedTasks = InOut.loadCategoryTasks(category);
@@ -59,7 +66,7 @@ public class TabPanel extends JPanel {
     /**
      * Gibt die Kategorie dieses Panels zurück.
      *
-     * @return Die aktuelle Kategorie.
+     * @return Der Name der Kategorie.
      */
     public String getCategory() {
         return category;

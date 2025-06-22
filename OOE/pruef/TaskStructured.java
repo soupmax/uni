@@ -1,8 +1,16 @@
 import org.json.JSONObject;
 
 /**
- * Repräsentiert eine Aufgabe mit Titel, Beschreibung, Kategorie und
- * Status.
+ * {@code TaskStructured} ist eine abstrakte Oberklasse für strukturierte
+ * Aufgaben,
+ * die über einen Titel, eine Beschreibung, eine Kategorie und einen
+ * Erledigt-Status verfügen.
+ *
+ * <p>
+ * Sie stellt gemeinsame Funktionalitäten für konkrete Unterklassen wie
+ * {@link TaskSimple}
+ * und {@link TaskTimed} bereit.
+ * </p>
  * 
  * @author Max
  */
@@ -12,7 +20,7 @@ public abstract class TaskStructured extends Task {
     protected boolean completed;
 
     /**
-     * Erstellt eine neue Aufgabe mit vollständigen Attributen.
+     * Erstellt eine neue strukturierte Aufgabe mit vollständigen Attributen.
      *
      * @param category  Kategorie der Aufgabe
      * @param title     Titel der Aufgabe
@@ -25,7 +33,7 @@ public abstract class TaskStructured extends Task {
     }
 
     /**
-     * Erstellt eine neue Aufgabe, die standardmäßig als nicht
+     * Erstellt eine neue strukturierte Aufgabe, die standardmäßig als nicht
      * erledigt gilt.
      *
      * @param category Kategorie der Aufgabe
@@ -43,6 +51,7 @@ public abstract class TaskStructured extends Task {
      * @return Beschreibung der Aufgabe inklusive Kategorie, Titel, Beschreibung und
      *         Erledigt-Status
      */
+    @Override
     public String toString() {
         return "category: " + category + "\n" +
                 "title: " + title +
@@ -51,18 +60,17 @@ public abstract class TaskStructured extends Task {
     }
 
     /**
-     * Wandelt eine Task in ein JSONObject um.
-     * 
-     * @param t Task-Objekt
-     * @return JSONObject mit Task-Daten
+     * Wandelt diese strukturierte Aufgabe in ein {@link JSONObject} um.
+     *
+     * @return Ein JSONObject mit den Attributen dieser Aufgabe
      */
+    @Override
     protected JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("category", category);
         json.put("title", title);
         json.put("content", content);
         json.put("completed", completed);
-
         return json;
     }
 }

@@ -2,33 +2,43 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * {@code TaskPanel} ist ein generisches Panel zur Darstellung einer
- * {@link Task}.
- * 
+ * {@code TaskStructuredPanel} ist ein spezialisiertes Panel zur Darstellung und
+ * Bearbeitung
+ * einer strukturierten Aufgabe vom Typ {@link TaskStructured}.
+ *
  * <p>
- * Es zeigt den Titel, die Beschreibung und den Status (erledigt/nicht erledigt)
- * einer Aufgabe an.
- * Optional kann die Methode {@link #AddExtraComponent(Task)} von Unterklassen
- * überschrieben werden,
- * um zusätzliche Informationen (z.&nbsp;B. Fälligkeitsdatum) anzuzeigen.
+ * Es erweitert {@link TaskPanel} um eine Checkbox zur Anzeige und Änderung des
+ * Erledigt-Status der Aufgabe. Wird eine Aufgabe als erledigt markiert, wird
+ * sie
+ * dauerhaft gespeichert und eine Callback-Funktion zur UI-Aktualisierung
+ * aufgerufen.
  * </p>
- * 
+ *
  * <p>
- * Wenn eine Aufgabe als erledigt markiert wird, wird die zugehörige
- * Callback-Funktion ausgeführt
- * und die Änderung dauerhaft gespeichert.
+ * Unterklassen können die Methode {@link #AddExtraComponent(Task)}
+ * überschreiben,
+ * um zusätzliche Informationen (z.&nbsp;B. Fälligkeitsdatum) darzustellen.
  * </p>
  * 
  * @author Max
  */
 public class TaskStructuredPanel extends TaskPanel {
 
+    /** Checkbox zur Darstellung und Änderung des Erledigt-Status */
     private JCheckBox completedCheckBox;
+
+    /** Die dargestellte strukturierte Aufgabe */
     private TaskStructured task;
-    private Runnable onStatusChange; // Wird absichtlich nicht entfernt, dient als Trigger für UI-Aktualisierung
 
     /**
-     * Erstellt ein neues Panel zur Anzeige einer Aufgabe.
+     * Callback-Funktion, die bei Statusänderung (z.&nbsp;B. erledigt) ausgeführt
+     * wird.
+     * Dient u.&nbsp;a. zur Aktualisierung der UI.
+     */
+    private Runnable onStatusChange;
+
+    /**
+     * Erstellt ein neues Panel zur Anzeige einer strukturierten Aufgabe.
      *
      * @param task           Die darzustellende Aufgabe.
      * @param onStatusChange Eine Callback-Funktion, die bei Statusänderung der
@@ -37,6 +47,7 @@ public class TaskStructuredPanel extends TaskPanel {
      */
     public TaskStructuredPanel(TaskStructured task, Runnable onStatusChange) {
         super(task);
+        this.task = task;
         this.onStatusChange = onStatusChange;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -51,10 +62,6 @@ public class TaskStructuredPanel extends TaskPanel {
         if (task.completed) {
             setBackground(Color.LIGHT_GRAY);
         }
-
-        // Titel
-
-        // Beschreibung
 
         // Erledigt-Checkbox
         completedCheckBox = new JCheckBox("Erledigt", task.completed);
@@ -80,6 +87,7 @@ public class TaskStructuredPanel extends TaskPanel {
      *
      * @param task Die anzuzeigende Aufgabe.
      */
+    @Override
     protected void AddExtraComponent(Task task) {
         // Standardmäßig keine zusätzlichen Komponenten
     }
@@ -89,6 +97,7 @@ public class TaskStructuredPanel extends TaskPanel {
      *
      * @return Die aktuell angezeigte {@link Task}.
      */
+    @Override
     public Task getTask() {
         return task;
     }

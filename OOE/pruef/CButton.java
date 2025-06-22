@@ -2,31 +2,32 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Die Klasse {@code CButton} ist ein Panel, das je nach übergebenem Typ einen
- * spezifischen Button anzeigt.
+ * Die Klasse {@code CButton} ist ein Panel, das je nach angegebenem Typ
+ * einen spezifischen Button darstellt.
+ *
  * <p>
  * Unterstützte Button-Typen:
  * <ul>
- * <li>{@code "addTask"}: Öffnet einen Dialog zur Erstellung einer neuen
- * Aufgabe.</li>
- * <li>{@code "deletePanel"}: Löscht die aktuelle Kategorie (Tab) samt
- * zugehöriger Aufgaben.</li>
+ * <li>{@code "addTask"} – Fügt eine neue Aufgabe über einen Dialog hinzu</li>
+ * <li>{@code "deletePanel"} – Löscht die aktuell geöffnete Kategorie (Tab)</li>
  * </ul>
+ * </p>
  *
  * <p>
- * Bei unbekanntem Typ wird ein Platzhalter-Label angezeigt.
+ * Bei unbekanntem Typ wird ein Hinweislabel angezeigt.
  * </p>
- * 
+ *
  * @author Max
  */
 public class CButton extends JPanel {
     int size = 50;
 
     /**
-     * Erstellt ein neues {@code CButton}-Panel mit einem Button entsprechend dem
-     * gegebenen Typ.
+     * Erstellt ein {@code CButton}-Panel und fügt den entsprechenden Button
+     * basierend auf dem übergebenen Typ hinzu.
      *
-     * @param type Der Button-Typ ({@code "addTask"}, {@code "deletePanel"})
+     * @param type Der Typ des Buttons ({@code "addTask"} oder
+     *             {@code "deletePanel"})
      */
     public CButton(String type) {
         setLayout(new FlowLayout());
@@ -39,17 +40,16 @@ public class CButton extends JPanel {
                 addDeletePanelButton();
                 break;
             default:
-                // Optional: Platzhalter oder Fehleranzeige
                 add(new JLabel("Unbekannter Button-Typ: " + type));
                 break;
         }
     }
 
     /**
-     * Erstellt einen JButton mit standardisierter Schriftgröße.
+     * Erstellt einen standardisierten Button mit fester Schriftgröße.
      *
-     * @param text Beschriftung des Buttons
-     * @return Ein formatierter JButton
+     * @param text Die Beschriftung des Buttons
+     * @return Ein stilisierter {@link JButton}
      */
     private JButton makeSquareButton(String text) {
         JButton squareButton = new JButton(text);
@@ -59,8 +59,8 @@ public class CButton extends JPanel {
     }
 
     /**
-     * Fügt dem Panel einen Button hinzu, der beim Klick einen Eingabedialog zur
-     * Erstellung einer neuen Aufgabe öffnet.
+     * Fügt einen Button zum Hinzufügen einer neuen Aufgabe hinzu.
+     * Öffnet beim Klicken einen Eingabedialog.
      */
     private void addTaskButton() {
         JButton btn = makeSquareButton("neue aufgabe");
@@ -69,9 +69,8 @@ public class CButton extends JPanel {
     }
 
     /**
-     * Öffnet den {@link TaskInputDialog} zur Erstellung einer neuen Aufgabe.
-     * Nach Bestätigung wird die Aufgabe gespeichert und das zugehörige TabPanel neu
-     * geladen.
+     * Öffnet einen {@link TaskInputDialog}, um eine neue Aufgabe zu erfassen.
+     * Wird eine Aufgabe bestätigt, wird sie gespeichert und das Panel neu geladen.
      */
     private void openInputDialog() {
         Frame owner = (Frame) SwingUtilities.getWindowAncestor(this);
@@ -89,8 +88,7 @@ public class CButton extends JPanel {
     }
 
     /**
-     * Fügt dem Panel einen Button hinzu, mit dem die aktuelle Kategorie und ihre
-     * Aufgaben gelöscht werden können.
+     * Fügt einen Button zum Löschen des aktuellen Panels (Tabs) hinzu.
      */
     private void addDeletePanelButton() {
         JButton btn = makeSquareButton("aktuelle kategorie löschen");
@@ -99,8 +97,8 @@ public class CButton extends JPanel {
     }
 
     /**
-     * Löscht die Aufgaben der aktuellen Kategorie und entfernt das zugehörige
-     * TabPanel aus dem TabbedPane.
+     * Entfernt das aktuell zugehörige {@link TabPanel} samt aller enthaltenen
+     * Aufgaben.
      */
     private void deletePanel() {
         JTabbedPane tabbedPane = (JTabbedPane) SwingUtilities.getAncestorOfClass(JTabbedPane.class, this);

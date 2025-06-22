@@ -10,8 +10,8 @@ import javax.swing.text.*;
  * <p>
  * Diese Klasse verhindert die Eingabe bestimmter Zeichen – insbesondere
  * solcher, die in Dateinamen ungültig sind (z.&nbsp;B.
- * {@code / \ : * ? " < > |}) –
- * und begrenzt gleichzeitig die Länge des eingegebenen Texts.
+ * {@code / \ : * ? " < > |}) – und begrenzt gleichzeitig die Länge des
+ * eingegebenen Texts.
  * </p>
  *
  * <p>
