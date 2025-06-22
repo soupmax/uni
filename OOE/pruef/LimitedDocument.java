@@ -4,8 +4,8 @@ import javax.swing.text.*;
 /**
  * {@code LimitedDocument} ist eine spezialisierte Implementierung von
  * {@link PlainDocument}, die sowohl die maximale Zeichenanzahl als auch eine
- * Liste unerlaubter Zeichen für Benutzereingaben in einem {@link JTextField}
- * oder {@link JTextArea} beschränkt.
+ * Liste unerlaubter Zeichen für Benutzereingaben in einem JTextField
+ * oder JTextArea beschränkt.
  *
  * <p>
  * Diese Klasse verhindert die Eingabe bestimmter Zeichen – insbesondere
@@ -16,7 +16,7 @@ import javax.swing.text.*;
  *
  * <p>
  * Sowohl Tastatureingaben als auch Einfügungen über die Zwischenablage
- * (Copy & Paste) werden automatisch geprüft und entsprechend gefiltert.
+ * (Copy and Paste) werden automatisch geprüft und entsprechend gefiltert.
  * </p>
  *
  * <p>

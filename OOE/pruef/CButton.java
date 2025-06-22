@@ -11,7 +11,6 @@ import java.awt.*;
  * <li>{@code "addTask"} – Fügt eine neue Aufgabe über einen Dialog hinzu</li>
  * <li>{@code "deletePanel"} – Löscht die aktuell geöffnete Kategorie (Tab)</li>
  * </ul>
- * </p>
  *
  * <p>
  * Bei unbekanntem Typ wird ein Hinweislabel angezeigt.

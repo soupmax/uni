@@ -31,7 +31,7 @@ import java.awt.*;
 public class App {
 
     /**
-     * Einstiegspunkt der Anwendung. Konfiguriert Look & Feel, lädt bestehende
+     * Einstiegspunkt der Anwendung. Konfiguriert Look and Feel, lädt bestehende
      * Kategorien
      * (Tabs), verwaltet Tabwechsel sowie das Erstellen neuer Kategorien und
      * behandelt

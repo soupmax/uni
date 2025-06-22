@@ -1,6 +1,6 @@
 {
   "java.project.referencedLibraries": [
-  "lib/**/*.jar"
-],
-  "java.project.sourcePaths": ["pruef", "ueb"]
+    "lib/**/*.jar"
+  ],
+  "java.project.sourcePaths": ["pruef"]
 }
