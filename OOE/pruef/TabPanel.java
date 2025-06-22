@@ -30,7 +30,7 @@ public class TabPanel extends JPanel {
         setLayout(new BorderLayout());
         if (isFreeform) {
             Task[] tasks = InOut.loadCategoryTasks(category);
-            if (tasks.length > 0) {
+            if (tasks != null && tasks.length > 0) {
                 TaskFreeform t = (TaskFreeform) tasks[0];
                 add(new TaskFreeformPanel(t));
             } else {

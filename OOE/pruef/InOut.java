@@ -215,11 +215,6 @@ public class InOut {
         if (!taskExists) {
             updatedList.add(updatedTask); // neu hinzufügen
         }
-        System.out.println("UpdateTask aufgerufen für: " + updatedTask.category + " / " + updatedTask.title);
-        System.out.println("Gespeicherte Tasks:");
-        for (Task t : tasks) {
-            System.out.println("→ " + t.category + " / " + t.title + " (" + t.getClass().getSimpleName() + ")");
-        }
 
         saveAllTasks(updatedList.toArray(new Task[0]));
 
