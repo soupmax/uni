@@ -7,6 +7,7 @@ body {
     'main aside'
     'footer footer';
   margin: 0;
+  background-color: darkslategray;
 }
 a{
   text-decoration: none;
@@ -15,31 +16,34 @@ a{
 nav a {
   background-color: white;
   padding: 1em;
-  margin: 0 0.5em 0 0.5em;
-  border: 1px solid grey;
-  border-bottom: none;
+  margin: 0.5em;
+  border-radius: 10px;
+  border: 1px solid black;
+  box-shadow: 5px 5px 5px darkgray;
 }
 nav {
   grid-area: nav;
-  background-color: rgb(225, 225, 225);
+  background-color: lightgray;
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
-  align-items: flex-end; 
+  align-items: flex-end;
+  border-bottom: 1px solid black;
 }
 nav a:hover {
-  padding-bottom: 1.2em;
+  background-color: darkgray;
+  color: white;
 }
 nav a.current {
-  
+  background-color: darkslategrey;
+  color: white;
 }
 main {
   grid-area: main;
-  background-color: white;
+  background-color: lightgray;
   overflow: auto;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
 }
 .contentArea {
   background-color: white;
@@ -104,18 +108,36 @@ figcaption::first-line {
 article ol li {
   margin-top: 0.5em;
 }
+.pingpong{
+  height: 100%;
+  width: 100%;
+}
+canvas {
+  background: black;
+  display: block;
+  margin: 0 auto;
+}
+#score {
+  text-align: center;
+  font-size: 1.5em;
+}
 aside {
   grid-area: aside;
   background-color: gainsboro;
 }
 footer {
   grid-area: footer;
-  background-color: gray;
+  background-color: darkslategrey;
   flex-flow: row wrap;
   align-content: center;
+  border-top: 1px solid black;
 }
 footer a {
-
+  color: white;
+  padding: 1em;
+}
+footer a:hover{
+  color: lightgray;
 }
 /* width */
 body ::-webkit-scrollbar {
