@@ -1,23 +1,32 @@
 /**
  * {@code TaskSimplePanel} ist eine spezialisierte Unterklasse von
- * {@link TaskPanel},
- * die eine einfache Aufgabe vom Typ {@link TaskSimple} darstellt.
+ * {@link TaskStructuredPanel}, die eine einfache Aufgabe vom Typ
+ * {@link TaskSimple} darstellt.
+ *
  * <p>
- * Sie übernimmt die Darstellung und Funktionalität von {@link TaskPanel},
- * jedoch mit dem spezifizierten {@link TaskSimple}-Aufgabentyp.
+ * Sie übernimmt die Darstellung und Funktionalität von
+ * {@link TaskStructuredPanel}
+ * und passt diese für Aufgaben ohne Fälligkeitsdatum an.
+ * </p>
+ *
+ * <p>
+ * Die Klasse ist primär für strukturierte Aufgaben gedacht, die keinen
+ * Zeitbezug benötigen.
+ * </p>
  * 
- * @author Max
+ * @author Fabian
  */
-public class TaskSimplePanel extends TaskPanel {
+public class TaskSimplePanel extends TaskStructuredPanel {
 
     /**
      * Erzeugt ein neues {@code TaskSimplePanel} für die gegebene einfache Aufgabe.
      *
      * @param task           Die einfache Aufgabe, die dargestellt werden soll.
-     * @param onStatusChange Runnable, der beim Statuswechsel der Aufgabe ausgeführt
-     *                       wird (z.B. Refresh).
+     * @param onStatusChange Eine Callback-Funktion, die ausgeführt wird, wenn sich
+     *                       der Erledigt-Status der Aufgabe ändert (z. B. zur
+     *                       Aktualisierung der Anzeige).
      */
     public TaskSimplePanel(TaskSimple task, Runnable onStatusChange) {
-        super((Task) task, onStatusChange);
+        super((TaskStructured) task, onStatusChange);
     }
 }

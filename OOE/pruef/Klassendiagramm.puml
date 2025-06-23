@@ -1,0 +1,161 @@
+@startuml
+
+' Basis-Einstellungen
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam classAttributeFontSize 11
+skinparam classMethodFontSize 11
+
+' === Klassen und Vererbungen ===
+
+abstract class Task {
+    - String category
+    - String content
+    - String title
+    + toString(): String
+    + toJSON(): JSONObject
+}
+
+abstract class TaskStructured extends Task {
+    - boolean completed
+    + toString(): String
+    + toJSON(): JSONObject
+}
+
+class TaskSimple extends TaskStructured {
+    + toString(): String
+    + toJSON(): JSONObject
+}
+
+class TaskTimed extends TaskStructured {
+    - LocalDate dueDate
+    + getDueDate(): LocalDate
+    + isDueToday(): boolean
+    + isOverDue(): boolean
+    + toJSON(): JSONObject
+}
+
+class TaskFreeform extends Task {
+}
+
+abstract class TaskPanel {
+    - JLabel titleLabel
+    - JTextArea contentArea
+    - Task task
+    + getTask(): Task
+    # AddExtraComponent(Task): void
+}
+
+class TaskStructuredPanel extends TaskPanel {
+    - JCheckBox completedCheckBox
+    - TaskStructured task
+    - Runnable onStatusChange
+}
+
+class TaskSimplePanel extends TaskStructuredPanel {
+}
+
+class TaskTimedPanel extends TaskStructuredPanel {
+    - JLabel dueDateLabel
+}
+
+class TaskFreeformPanel extends TaskPanel {
+    + getTask(): Task
+}
+
+class GridView {
+    - JPanel buttonPanel
+    - JPanel donePanel
+    - JPanel doneContent
+    - JPanel openPanel
+    - JPanel openContent
+    - JPanel timedPanel
+    - JPanel timedContent
+    - JPanel tasksWrapperPanel
+    - String category
+    + putNewTasks(Task[]): void
+}
+
+class InOut {
+    + loadCategoryTasks(String): Task[]
+    + saveTask(Task): void
+    + updateTask(Task): void
+    + deleteTask(Task): void
+    + JSONToTask(JSONObject): Task
+}
+
+class Utils {
+    + sortTasks(Task[]): Task[]
+}
+
+class TaskInputDialog {
+    - JTextField titleField
+    - JTextArea descriptionArea
+    - JTextField dueDateField
+    - TaskStructured resultTask
+    + showDialog(): TaskStructured
+}
+
+class NewTabPanelDialog {
+    + showDialog(Component): NewTabData
+}
+
+class NewTabData {
+    + String category
+    + boolean isPlainText
+}
+
+class LimitedDocument {
+    + insertString(...): void
+}
+
+class CButton {
+    - int size
+    - Color hoverColor
+    - Color defaultColor
+}
+
+class TabPanel {
+    - GridView grid
+    - String category
+    - boolean isFreeform
+    + reload(): void
+    + getCategory(): String
+}
+
+class MainWindow {
+    - JTabbedPane tabbedPane
+}
+
+class App {
+    + main(String[]): void
+}
+
+' === Beziehungen ===
+
+Task <|-- TaskStructured
+TaskStructured <|-- TaskSimple
+TaskStructured <|-- TaskTimed
+Task <|-- TaskFreeform
+
+TaskPanel <|-- TaskStructuredPanel
+TaskPanel <|-- TaskFreeformPanel
+TaskStructuredPanel <|-- TaskSimplePanel
+TaskStructuredPanel <|-- TaskTimedPanel
+
+NewTabPanelDialog --> NewTabData
+TaskTimedPanel --> TaskTimed
+TaskSimplePanel --> TaskSimple
+TaskFreeformPanel --> TaskFreeform
+TaskStructuredPanel --> TaskStructured
+TaskPanel --> Task
+TaskInputDialog --> TaskStructured
+GridView --> Task
+TabPanel --> GridView
+TabPanel --> TaskFreeformPanel
+MainWindow --> TabPanel
+App --> MainWindow
+InOut --> Task
+Utils --> Task
+
+@enduml

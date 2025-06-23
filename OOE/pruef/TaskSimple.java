@@ -1,60 +1,70 @@
 import org.json.JSONObject;
 
 /**
- * Erweiterung der Klasse Task ohne zusätzliche Attribute.
- * Repräsentiert eine einfache Aufgabe.
- * 
- * @author Max
+ * {@code TaskSimple} repräsentiert eine einfache strukturierte Aufgabe ohne
+ * Fälligkeitsdatum.
+ * Sie erbt alle Attribute und Methoden von {@link TaskStructured}.
+ *
+ * <p>
+ * Eine {@code TaskSimple}-Instanz enthält Informationen über die Kategorie, den
+ * Titel,
+ * den Aufgabeninhalt und ob die Aufgabe erledigt wurde.
+ * </p>
+ *
+ * <p>
+ * Die Klasse bietet Konstruktoren zur Erstellung einer Aufgabe mit oder ohne
+ * explizitem Erledigt-Status.
+ * </p>
+ *
+ * @author Fabian
  */
-public class TaskSimple extends Task {
+public class TaskSimple extends TaskStructured {
 
     /**
-     * Konstruktor mit vollständigen Attributen.
+     * Erstellt eine neue {@code TaskSimple}-Aufgabe mit allen Attributen.
      *
-     * @param category    Kategorie der Aufgabe
-     * @param title       Titel der Aufgabe
-     * @param description Beschreibung der Aufgabe
-     * @param completed   Erledigt-Status der Aufgabe
+     * @param category  Kategorie der Aufgabe
+     * @param title     Titel der Aufgabe
+     * @param content   Beschreibung der Aufgabe
+     * @param completed Erledigt-Status (true = erledigt)
      */
-    public TaskSimple(String category, String title, String description, boolean completed) {
-        super(category, title, description, completed);
+    public TaskSimple(String category, String title, String content, boolean completed) {
+        super(category, title, content, completed);
     }
 
     /**
-     * Konstruktor ohne Erledigt-Status (standardmäßig false).
+     * Erstellt eine neue {@code TaskSimple}-Aufgabe, standardmäßig als nicht
+     * erledigt.
      *
-     * @param category    Kategorie der Aufgabe
-     * @param title       Titel der Aufgabe
-     * @param description Beschreibung der Aufgabe
+     * @param category Kategorie der Aufgabe
+     * @param title    Titel der Aufgabe
+     * @param content  Beschreibung der Aufgabe
      */
-    public TaskSimple(String category, String title, String description) {
-        super(category, title, description);
+    public TaskSimple(String category, String title, String content) {
+        super(category, title, content);
     }
 
     /**
-     * Gibt eine String-Darstellung der Aufgabe zurück.
-     *
-     * @return Beschreibung der Aufgabe inklusive Kategorie, Titel, Beschreibung und
-     *         Erledigt-Status
+     * Gibt eine textuelle Darstellung der Aufgabe zurück.
+     * 
+     * @return Eine formatierte Zeichenkette mit den wichtigsten Informationen.
      */
     @Override
     public String toString() {
         return "category: " + category + "\n" +
                 "title: " + title +
-                " description: " + description +
+                " content: " + content +
                 " completed: " + (completed ? "true" : "false");
     }
 
-    @Override
     /**
-     * Wandelt eine TaskSimple in ein JSONObject um.
-     * 
-     * @param t TaskSimple-Objekt
-     * @return JSONObject mit TaskSimple-Daten
+     * Serialisiert diese {@code TaskSimple} in ein {@link JSONObject}.
+     *
+     * @return Ein JSON-Objekt mit allen relevanten Attributen.
      */
+    @Override
     public JSONObject toJSON() {
         JSONObject json = super.toJSON();
-
         return json;
     }
 }

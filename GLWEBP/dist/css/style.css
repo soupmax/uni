@@ -1,0 +1,142 @@
+body {
+  display: grid;
+  grid-template-columns: 80% 20%;
+  grid-template-rows: 10% 80% 10%;
+  grid-template-areas:
+    'nav nav'
+    'main aside'
+    'footer footer';
+  margin: 0;
+}
+a{
+  text-decoration: none;
+  color: black;
+}
+nav a {
+  background-color: white;
+  padding: 1em;
+  margin: 0 0.5em 0 0.5em;
+  border: 1px solid grey;
+  border-bottom: none;
+}
+nav {
+  grid-area: nav;
+  background-color: rgb(225, 225, 225);
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: flex-end; 
+}
+nav a:hover {
+  padding-bottom: 1.2em;
+}
+nav a.current {
+  
+}
+main {
+  grid-area: main;
+  background-color: white;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+}
+.contentArea {
+  background-color: white;
+  padding: 2em;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  margin: 1em;
+}
+.recipeArea{
+  display: grid;
+  grid-template-areas: 
+  'head head'
+  'image text';
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 10% 90%;
+  align-items: center;
+}
+.recipeArea h1{
+  grid-area: head;
+}
+.recipeArea img{
+  grid-area: image;
+  width: 300px;
+  max-height: 300px;
+  height: auto;
+  border-radius: 5px;
+}
+.recipeArea ol {
+  grid-area: text;
+}
+.imageArea{
+    display: flex;
+  align-items: center;
+}
+
+.imageArea img {
+  width: 300px;
+  max-height: 300px;
+  height: auto;
+  border-radius: 5px;
+}
+.left {
+  flex-direction: row;
+  text-align: left;
+}
+
+.right {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+figcaption {
+  padding: 0 15px;
+  text-align: left;
+}
+figcaption::first-line {
+  font-size: large;
+  font-weight: bolder;
+  text-decoration: underline;
+}
+/*article.recipe{}*/
+article ol li {
+  margin-top: 0.5em;
+}
+aside {
+  grid-area: aside;
+  background-color: gainsboro;
+}
+footer {
+  grid-area: footer;
+  background-color: gray;
+  flex-flow: row wrap;
+  align-content: center;
+}
+footer a {
+
+}
+/* width */
+body ::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+/* Track */
+body ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+body ::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+body ::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+#map {
+  width: 100%;
+  height: 100%;
+}

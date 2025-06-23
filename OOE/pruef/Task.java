@@ -1,79 +1,76 @@
 import org.json.JSONObject;
 
 /**
- * Repräsentiert eine Aufgabe mit Titel, Beschreibung, Kategorie und
- * Status.
+ * Abstrakte Basisklasse für Aufgaben.
+ * <p>
+ * Repräsentiert eine generische Aufgabe mit Kategorie, Titel und Inhalt.
+ * Wird von konkreten Task-Typen wie {@link TaskSimple}, {@link TaskTimed} oder
+ * {@link TaskFreeform} erweitert.
+ * </p>
+ * <p>
+ * Die Klasse bietet grundlegende Methoden zur Serialisierung und gemeinsame
+ * Felder.
+ * </p>
  * 
- * @author Max
+ * @author Fabian
  */
-public class Task {
-    /** Kategorie der Aufgabe */
+public abstract class Task {
+    /** Kategorie der Aufgabe. */
     public String category;
 
-    /** Titel der Aufgabe */
+    /** Inhalt der Aufgabe. */
+    public String content;
+
+    /** Titel der Aufgabe. Bei Fließtext-Aufgaben standardmäßig "none". */
     public String title;
 
-    /** Beschreibung der Aufgabe */
-    public String description;
-
-    /** Gibt an, ob die Aufgabe erledigt ist */
-    protected boolean completed;
-
     /**
-     * Erstellt eine neue Aufgabe mit vollständigen Attributen.
+     * Konstruktor für strukturierte Aufgaben mit Titel.
      *
-     * @param category    Kategorie der Aufgabe
-     * @param title       Titel der Aufgabe
-     * @param description Beschreibung der Aufgabe
-     * @param completed   Erledigt-Status der Aufgabe
+     * @param category Kategorie der Aufgabe
+     * @param title    Titel der Aufgabe
+     * @param content  Inhalt der Aufgabe
      */
-    public Task(String category, String title, String description, boolean completed) {
-        this.title = title;
-        this.description = description;
-        this.completed = completed;
+    public Task(String category, String title, String content) {
+        this.content = content;
         this.category = category;
+        this.title = title;
     }
 
     /**
-     * Erstellt eine neue Aufgabe, die standardmäßig als nicht
-     * erledigt gilt.
+     * Konstruktor für Fließtext-Aufgaben (ohne expliziten Titel).
      *
-     * @param category    Kategorie der Aufgabe
-     * @param title       Titel der Aufgabe
-     * @param description Beschreibung der Aufgabe
+     * @param category Kategorie der Aufgabe
+     * @param content  Inhalt der Aufgabe
      */
-    public Task(String category, String title, String description) {
-        this.title = title;
-        this.description = description;
+    public Task(String category, String content) {
+        this.content = content;
         this.category = category;
-        this.completed = false;
+        this.title = "none";
     }
 
     /**
-     * Gibt eine String-Darstellung der Aufgabe zurück.
+     * Gibt den Inhalt der Aufgabe zurück.
+     * Kann bei Bedarf überschrieben werden.
      *
-     * @return Beschreibung der Aufgabe inklusive Kategorie, Titel, Beschreibung und
-     *         Erledigt-Status
+     * @return Der Aufgabeninhalt als {@code String}
      */
+    @Override
     public String toString() {
-        return "category: " + category + "\n" +
-                "title: " + title +
-                " description: " + description +
-                " completed: " + (completed ? "true" : "false");
+        return content;
     }
 
     /**
-     * Wandelt eine Task in ein JSONObject um.
+     * Serialisiert diese Aufgabe als {@link JSONObject}.
+     * Erweiterte Klassen fügen ggf. weitere Felder hinzu.
      * 
-     * @param t Task-Objekt
-     * @return JSONObject mit Task-Daten
+     * @return JSON-Repräsentation dieser Aufgabe
      */
     protected JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("category", category);
+        json.put("content", content);
         json.put("title", title);
-        json.put("description", description);
-        json.put("completed", completed);
 
         return json;
     }

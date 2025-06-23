@@ -3,8 +3,8 @@ import java.awt.*;
 
 /**
  * Die {@code App}-Klasse ist der Einstiegspunkt der Anwendung.
- * Sie erstellt das Hauptfenster mit einem {@link JTabbedPane},
- * in dem verschiedene Task-Kategorien als Tabs angezeigt werden.
+ * Sie erzeugt das Hauptfenster mit einem {@link JTabbedPane}, in dem
+ * verschiedene Task-Kategorien als Tabs angezeigt werden.
  *
  * <p>
  * Zusätzlich gibt es einen "+"-Tab, der es dem Benutzer erlaubt,
@@ -13,12 +13,17 @@ import java.awt.*;
  *
  * <p>
  * Beim Hinzufügen eines neuen Tabs wird der Benutzer über einen
- * {@link JOptionPane} zur Eingabe eines Tab-Namens aufgefordert.
+ * {@link JOptionPane}-Dialog zur Eingabe eines Tab-Namens aufgefordert.
  * Bei Bestätigung wird ein neuer Tab mit dem entsprechenden Inhalt erstellt.
  * </p>
  *
  * <p>
- * Das Hauptfenster wird beim Start maximiert.
+ * Beim Schließen des Fensters werden offene Fließtext-Tabs automatisch
+ * gespeichert.
+ * </p>
+ *
+ * <p>
+ * Das Hauptfenster wird beim Start maximiert dargestellt.
  * </p>
  *
  * @author Max
@@ -26,9 +31,11 @@ import java.awt.*;
 public class App {
 
     /**
-     * Einstiegspunkt der Anwendung. Erstellt das Hauptfenster und das
-     * {@link JTabbedPane}, verwaltet das Hinzufügen neuer Tabs und behandelt
-     * entsprechende Benutzerinteraktionen.
+     * Einstiegspunkt der Anwendung. Konfiguriert Look and Feel, lädt bestehende
+     * Kategorien
+     * (Tabs), verwaltet Tabwechsel sowie das Erstellen neuer Kategorien und
+     * behandelt
+     * das Speichern beim Beenden.
      *
      * @param args Kommandozeilenargumente (werden nicht verwendet)
      */
@@ -36,7 +43,7 @@ public class App {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-            // Schriftart überall auf "Segoe UI", 13pt setzen (modern & gut lesbar)
+            // Schriftart auf "Segoe UI", 13pt setzen
             UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 13));
             UIManager.put("Button.font", new Font("Segoe UI", Font.PLAIN, 13));
             UIManager.put("CheckBox.font", new Font("Segoe UI", Font.PLAIN, 13));
@@ -44,8 +51,8 @@ public class App {
             UIManager.put("TextField.font", new Font("Segoe UI", Font.PLAIN, 13));
             UIManager.put("TitledBorder.font", new Font("Segoe UI", Font.BOLD, 13));
 
-            // Farben für Komponenten vereinheitlichen
-            Color background = new Color(245, 245, 245); // helles Grau
+            // Einheitliche Farbgebung
+            Color background = new Color(245, 245, 245);
             Color foreground = Color.DARK_GRAY;
 
             UIManager.put("Panel.background", background);
@@ -55,71 +62,82 @@ public class App {
             UIManager.put("ScrollPane.background", background);
             UIManager.put("CheckBox.background", background);
             UIManager.put("CheckBox.foreground", foreground);
-            UIManager.put("Button.background", new Color(230, 230, 230)); // leicht abgehoben
+            UIManager.put("Button.background", new Color(230, 230, 230));
             UIManager.put("Button.foreground", foreground);
 
-            // Optional: Button leicht "flacher" wirken lassen
+            // Fokus-Rahmen entfernen
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-                | UnsupportedLookAndFeelException e) {
-            e.printStackTrace(); // oder Logging / Fallback
+        } catch (Exception e) {
+            e.printStackTrace(); // Fallback bei Fehler
         }
-        // Erstellen und Konfigurieren des Hauptfensters
+
+        // Hauptfenster konfigurieren
         JFrame frame = new JFrame("Task Viewer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(300, 300));
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Fenster maximieren
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        // Erstellen des Tab-Panels
+        // TabbedPane erstellen
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        // Laden vorhandener Kategorien (Tabs)
+        // Vorhandene Kategorien laden
         String[] categories = InOut.getAllTabs();
         for (String category : categories) {
-            tabbedPane.addTab(category, new TabPanel(category));
+            if (InOut.isFreeformCategory(category)) {
+                tabbedPane.addTab(category, new TabPanel(category, true));
+            } else {
+                tabbedPane.addTab(category, new TabPanel(category, false));
+            }
         }
 
-        // "+" Tab hinzufügen für das Erstellen neuer Kategorien
+        // "+"-Tab hinzufügen
         tabbedPane.addTab("+", new JPanel());
 
-        /**
-         * Speichert den Index des zuletzt gewählten Tabs.
-         * Wird benötigt, um bei einem Abbruch des Namensdialogs den Zustand
-         * wiederherzustellen.
-         */
+        // Speichern beim Beenden
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                // Nur Freeform-Tabs speichern
+                for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+                    Component comp = tabbedPane.getComponentAt(i);
+                    if (comp instanceof TabPanel panel && panel.isFreeform) {
+                        for (Component c : panel.getComponents()) {
+                            if (c instanceof TaskFreeformPanel tfp) {
+                                InOut.updateTask(tfp.getTask());
+                                break;
+                            }
+                        }
+                    }
+                }
+                System.exit(0);
+            }
+        });
+
+        // Letzten Tab merken
         final int[] previousIndex = { 0 };
 
-        /**
-         * Verhindert doppelte Events durch programmgesteuerte Tab-Wechsel.
-         */
+        // Event-Handler blockieren bei programmgesteuertem Wechsel
         final boolean[] ignoreEvent = { false };
 
-        /**
-         * Sonderfallbehandlung: Wenn zu Beginn nur der "+"-Tab existiert, sofort neuen
-         * Namen abfragen.
-         */
+        // Wenn nur "+"-Tab vorhanden, direkt neuen Tab anlegen
         if (tabbedPane.getTabCount() == 1) {
-            ignoreEvent[0] = true; // Listener blockieren
+            ignoreEvent[0] = true;
             SwingUtilities.invokeLater(() -> {
-                String newCategory = JOptionPane.showInputDialog(
-                        frame, "Neue Kategorie eingeben:", "Neuer Tab", JOptionPane.PLAIN_MESSAGE);
-                if (newCategory != null && !newCategory.trim().isEmpty()) {
-                    tabbedPane.removeTabAt(0);
-                    tabbedPane.addTab(newCategory, new TabPanel(newCategory));
+                NewTabPanelDialog.NewTabData data = NewTabPanelDialog.showDialog(frame);
+                if (data != null) {
+                    tabbedPane.removeTabAt(tabbedPane.getTabCount() - 1);
+                    tabbedPane.addTab(data.category, new TabPanel(data.category, data.isPlainText));
                     tabbedPane.addTab("+", new JPanel());
-                    tabbedPane.setSelectedIndex(0);
-                    previousIndex[0] = 0;
+
+                    int newIndex = tabbedPane.getTabCount() - 2;
+                    tabbedPane.setSelectedIndex(newIndex);
+                    previousIndex[0] = newIndex;
                 }
-                ignoreEvent[0] = false; // Listener wieder aktivieren
+                ignoreEvent[0] = false;
             });
         }
 
-        /**
-         * Listener für Tab-Wechsel:
-         * Wenn "+" ausgewählt wird, erscheint ein Dialog zur Eingabe eines neuen
-         * Tab-Namens.
-         * Wird ein Name eingegeben, wird ein neuer Tab hinzugefügt.
-         */
+        // Listener für Tab-Wechsel
         tabbedPane.addChangeListener(e -> {
             if (ignoreEvent[0])
                 return;
@@ -127,35 +145,29 @@ public class App {
             int index = tabbedPane.getSelectedIndex();
 
             // "+"-Tab wurde ausgewählt
-            if (index == tabbedPane.getTabCount() - 1 && tabbedPane.getTabCount() > 0) {
+            if (index == tabbedPane.getTabCount() - 1) {
                 ignoreEvent[0] = true;
-                String newCategory = JOptionPane.showInputDialog(
-                        null, "Neue Kategorie eingeben:", "Neuer Tab", JOptionPane.PLAIN_MESSAGE);
-
-                if (newCategory != null && !newCategory.trim().isEmpty()) {
-                    // "+"-Tab entfernen, neuen hinzufügen und "+" erneut anhängen
+                NewTabPanelDialog.NewTabData data = NewTabPanelDialog.showDialog(frame);
+                if (data != null) {
                     tabbedPane.removeTabAt(tabbedPane.getTabCount() - 1);
-                    tabbedPane.addTab(newCategory, new TabPanel(newCategory));
+                    tabbedPane.addTab(data.category, new TabPanel(data.category, data.isPlainText));
                     tabbedPane.addTab("+", new JPanel());
 
-                    // Neu erstellten Tab aktivieren
                     int newIndex = tabbedPane.getTabCount() - 2;
                     tabbedPane.setSelectedIndex(newIndex);
                     previousIndex[0] = newIndex;
                 } else {
-                    // Bei Abbruch zum vorherigen Tab zurückspringen
+                    // Abbruch: alten Tab wiederherstellen
                     if (previousIndex[0] >= 0 && previousIndex[0] < tabbedPane.getTabCount()) {
                         tabbedPane.setSelectedIndex(previousIndex[0]);
                     }
                 }
                 ignoreEvent[0] = false;
             } else {
-                // Nutzer hat auf anderen Tab gewechselt
                 previousIndex[0] = index;
             }
         });
 
-        // TabbedPane zum Frame hinzufügen und Fenster anzeigen
         frame.add(tabbedPane);
         frame.setVisible(true);
     }

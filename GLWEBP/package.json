@@ -1,0 +1,29 @@
+{
+  "name": "glwebp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build && http-server dist -o",
+    "build": "esbuild src/js/script.js --bundle --outfile=dist/bundle.js --minify && cpy src/index.html dist --flat && cpy \"src/css/**/*\" dist/css && cpy \"src/img/**/*\" dist/img && cpy \"src/sites/**/*\" dist/sites && cpy \"node_modules/leaflet/dist/images/*\" dist/images",
+    "lint": "eslint src/js",
+    "format": "prettier --write src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/css": "^0.8.1",
+    "@eslint/js": "^9.28.0",
+    "@eslint/json": "^0.12.0",
+    "cpy-cli": "^5.0.0",
+    "esbuild": "^0.25.5",
+    "eslint": "^9.28.0",
+    "globals": "^16.2.0",
+    "http-server": "^14.1.1",
+    "prettier": "^3.5.3"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  }
+}

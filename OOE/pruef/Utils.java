@@ -4,22 +4,39 @@ import java.util.Comparator;
 
 /**
  * Hilfsklasse mit statischen Methoden zur Verarbeitung von Aufgaben.
+ * 
+ * <p>
+ * Derzeit bietet sie eine zentrale Sortierfunktion für {@link Task}-Objekte,
+ * insbesondere für die Anzeige in der Benutzeroberfläche.
+ * </p>
+ * 
+ * <p>
+ * Die Sortierung priorisiert zeitgebundene Aufgaben
+ * und ordnet sie nach Fälligkeitsdatum und Titel.
+ * </p>
+ * 
+ * @author Max
  */
 public class Utils {
 
     /**
-     * Sortiert ein Array von {@link Task}-Objekten.
-     * <p>
-     * Kriterien:
+     * Sortiert ein Array von {@link Task}-Objekten nach folgenden Kriterien:
+     *
      * <ol>
-     * <li>Zeitgebundene Aufgaben (TaskTimed) zuerst – sortiert nach
-     * Fälligkeitsdatum</li>
-     * <li>Andere Aufgaben am Ende (mit LocalDate.MAX)</li>
-     * <li>Innerhalb gleicher Kategorie alphabetisch nach Titel</li>
+     * <li>{@link TaskTimed}-Objekte zuerst, sortiert nach Fälligkeitsdatum
+     * (aufsteigend)</li>
+     * <li>Andere Aufgabentypen folgen, sortiert mit {@link LocalDate#MAX} als
+     * Platzhalter</li>
+     * <li>Bei gleichem Datum erfolgt eine alphabetische Sortierung nach Titel
+     * (case-insensitive)</li>
      * </ol>
      *
-     * @param tasks Das zu sortierende Aufgaben-Array.
-     * @return Das sortierte Array (identische Referenz).
+     * <p>
+     * Diese Methode verändert das übergebene Array direkt (in-place).
+     * </p>
+     *
+     * @param tasks Das zu sortierende Array von Aufgaben.
+     * @return Das sortierte Array (identische Referenz wie Eingabe).
      */
     public static Task[] sortTasks(Task[] tasks) {
         if (tasks == null)

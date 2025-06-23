@@ -33,7 +33,7 @@ public class TaskInputDialog extends JDialog {
     private JTextField dueDateField;
 
     /** Das Ergebnisobjekt (Task), das vom Dialog erstellt wurde */
-    private Task resultTask;
+    private TaskStructured resultTask;
 
     /**
      * Erstellt einen neuen {@code TaskInputDialog}.
@@ -73,7 +73,11 @@ public class TaskInputDialog extends JDialog {
         JButton okButton = new JButton("Erstellen");
         JButton cancelButton = new JButton("Abbrechen");
 
-        // OK-Button: Eingaben validieren und Aufgabe erstellen
+        /**
+         * OK-Button: Validiert Benutzereingaben und erzeugt eine passende Task.
+         * Wenn ein gültiges Fälligkeitsdatum eingegeben wird, wird eine TaskTimed
+         * erstellt; andernfalls eine TaskSimple.
+         */
         okButton.addActionListener(e -> {
             String title = titleField.getText().trim();
             String description = descriptionArea.getText().trim();
@@ -100,11 +104,12 @@ public class TaskInputDialog extends JDialog {
             } else {
                 resultTask = new TaskSimple(category, title, description);
             }
-
             dispose();
         });
 
-        // Abbrechen-Button: Dialog schließen ohne Aufgabe zu erstellen
+        /**
+         * Cancel-Button: Bricht den Dialog ab und gibt null als Ergebnis zurück.
+         */
         cancelButton.addActionListener(e -> {
             resultTask = null;
             dispose();
@@ -121,7 +126,7 @@ public class TaskInputDialog extends JDialog {
      * @return ein {@link Task}-Objekt, wenn der Nutzer bestätigt;
      *         {@code null}, wenn der Dialog abgebrochen wurde
      */
-    public Task showDialog() {
+    public TaskStructured showDialog() {
         setVisible(true);
         return resultTask;
     }
