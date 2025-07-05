@@ -108,14 +108,18 @@ figcaption::first-line {
 article ol li {
   margin-top: 0.5em;
 }
-.pingpong{
+.pingStart{
   height: 100%;
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 canvas {
   background: black;
   display: block;
   margin: 0 auto;
+  height: 70vh;
+  width: 70vh;
 }
 #score {
   text-align: center;
