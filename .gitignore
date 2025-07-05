@@ -1,1 +1,4 @@
 tasks.json
+README_WEB.md
+/dist/
+/node_modules/

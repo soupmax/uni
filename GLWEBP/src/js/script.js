@@ -1,17 +1,44 @@
 import L from 'leaflet';
+import './pingpong.js';
 
-window.addEventListener('load', function () {
+/**
+ * Initialisiert die Weltkarte mit Leaflet.js.
+ * Zeigt bei Ladefehlern eine Nachricht im Map-Container.
+ *
+ * @returns {void}
+ */
+function initializeMap() {
   const mapContainer = document.getElementById('map');
-  if (mapContainer) {
-    const map = L.map(mapContainer).setView([20, 0], 2);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-    }).addTo(map);
-  }
-});
+  if (!mapContainer) return;
 
-// Inhalt zu figcaptions hinzufügen
-document.addEventListener('DOMContentLoaded', function () {
+  const map = L.map(mapContainer).setView([20, 0], 2);
+
+  const tiles = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '© OpenStreetMap contributors',
+    },
+  );
+
+  // Fehlerbehandlung bei Ladeproblemen
+  tiles.on('tileerror', () => {
+    mapContainer.innerHTML = `
+      <div style="padding: 2em; text-align: center; color: #900;">
+        <strong>Fehler beim Laden der Karte.</strong><br />
+        Bitte überprüfen Sie Ihre Internetverbindung.
+      </div>`;
+  });
+
+  tiles.addTo(map);
+}
+
+/**
+ * Fügt jedem <figcaption> auf der Seite Beispieltext hinzu.
+ * Wird verwendet auf der Bilder-Seite zur automatischen Generierung von Demo-Beschreibungen.
+ *
+ * @returns {void}
+ */
+function fillImageCaptions() {
   const fcaptions = document.getElementsByTagName('figcaption');
   for (const fcap of fcaptions) {
     let txt = 'Ich bin ein wichtiger Beispieltext.\n\n';
@@ -20,26 +47,31 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     fcap.innerText = txt;
   }
-  const startScreen = document.getElementById('start-screen');
-  const gameScreen = document.getElementById('game-screen');
-  const startBtn = document.getElementById('start-button');
-  const quitBtn = document.getElementById('quit-button');
-  const canvas = document.getElementById('game-canvas');
-  const ctx = canvas.getContext('2d');
+}
 
-  let playerScore = 0;
-  let enemyScore = 0;
-  let gameInterval;
+/**
+ * Füllt alle <aside>-Elemente mit einem simulierten Lade-Spinner.
+ * Verwendet für Seiten mit noch nicht implementierten oder dynamisch ladbaren Inhalten.
+ *
+ * @returns {void}
+ */
+function fillAsidesWithLoader() {
+  const asides = document.getElementsByTagName('aside');
+  for (const aside of asides) {
+    aside.classList.add('sidebar-loader');
+    aside.innerHTML = `
+      <h2>Inhalt wird geladen...</h2>
+      <div class="spinner-container">
+        <div class="spinner"></div>
+      </div>
+      <p class="loading-note">Bitte warten...</p>
+    `;
+  }
+}
 
-  startBtn.addEventListener('click', () => {
-    startScreen.style.display = 'none';
-    gameScreen.style.display = 'block';
-    startGame();
-  });
-
-  quitBtn.addEventListener('click', () => {
-    clearInterval(gameInterval);
-    gameScreen.style.display = 'none';
-    startScreen.style.display = 'block';
-  });
+// Initialisierungen ausführen
+window.addEventListener('load', initializeMap);
+document.addEventListener('DOMContentLoaded', () => {
+  fillImageCaptions();
+  fillAsidesWithLoader();
 });

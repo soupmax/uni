@@ -5,27 +5,35 @@
     <title>Startseite</title>
   </head>
   <body>
+    <header>
     <nav>
       <a href="./index.html" class="current">Startseite</a>
       <a href="./sites/recip.html">Rezepte</a>
       <a href="./sites/images.html">Bilder</a>
       <a href="./sites/map.html">Karte</a>
-    </nav>
+    </nav></header>
     <main>
-    <article class="contentArea pingpong">
-  <div id="start-screen">
+  <!-- Startbildschirm -->
+  <section id="pingStart" class="contentArea">
     <h1>Ping Pong</h1>
-    <button id="start-button">Start</button>
-  </div>
+    <label for="playerName">Dein Name:</label>
+    <input type="text" id="playerName" placeholder="Spielername" />
+    <!--wird nicht abgesichert, da es nirgendwo verwendet wird-->
+    <button id="start-button">Spiel starten</button>
+  </section>
 
-  <div id="game-screen" style="display:none;">
+  <!-- Spielbildschirm -->
+  <section id="pingGame" class="contentArea" style="display:none;">
     <canvas id="game-canvas" width="800" height="600"></canvas>
+    <p id="score">Spieler: 0 | Gegner: 0</p>
     <button id="quit-button">Beenden</button>
-    <div id="score">Spieler: 0 | Gegner: 0</div>
-  </div>
-</article>
-    </main>
-    <aside>aside</aside>
+  </section>
+</main>
+
+   <aside class="sidebar-loader">
+  
+</aside>
+
     <footer>
       <a href="./sites/data.html">Datenschutz</a>
       <a href="./sites/impr.html">Impressum</a>
